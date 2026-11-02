@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+# Entorno virtual
+.venv/
+venv/
+# Variables de entorno
+.env
+.env.*
+# Permitir una plantilla de ejemplo
+!.env.example
+# Archivos locales de desarrollo
+db.sqlite3
+*.log
+# Archivos del editor y del sistema operativo
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
