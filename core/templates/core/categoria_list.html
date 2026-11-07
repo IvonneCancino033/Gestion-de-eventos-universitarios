@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categorías</title>
+</head>
+<body>
+    <h2>Categorías</h2>
+    <p><a href="{% url 'inicio' %}">Volver al inicio</a></p>
+    <p><a href="{% url 'crear_categoria' %}">Nueva categoría</a></p>
+
+    {% if categorias %}
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for categoria in categorias %}
+                    <tr>
+                        <td>{{ categoria.nombre }}</td>
+                        <td>{{ categoria.descripcion }}</td>
+                        <td>{% if categoria.estado %}Activa{% else %}Inactiva{% endif %}</td>
+                        <td><a href="{% url 'editar_categoria' categoria.pk %}">Editar</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay categorías registradas.</p>
+    {% endif %}
+</body>
+</html>
