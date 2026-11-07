@@ -1,9 +1,10 @@
 from django.db import models #django para crear la base de datos
 
 class Categoria(models.Model): #clase categoria
-    nombre = models.CharField(max_length=100) #nombre de la categoria
+    nombre = models.CharField(max_length=100, unique=True) #nombre de la categoria
     descripcion = models.TextField(blank=True, null=True) #descripcion del evento
-
+    estado = models.BooleanField(default=True)
+    
     creado_en = models.DateTimeField(auto_now_add=True) #guarda la fecha y hora en que se genera la categoria
     actualizado_en = models.DateTimeField(auto_now=True) #modifica la fecha y hora cuando se edita la categoria
 
