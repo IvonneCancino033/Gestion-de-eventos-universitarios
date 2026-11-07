@@ -1,5 +1,12 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import Categoria
+
+
+@login_required
+def inicio(request):
+    return render(request, "core/index.html")
+
 
 # Listar categorías
 def lista_categorias(request): #funcion vista
