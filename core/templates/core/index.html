@@ -6,7 +6,7 @@
     <title>Inicio</title>
 </head>
 <body>
-    <h2>Bienvenida, {{ user.username }}</h2>
+    <h2>Bienvenid@, {{ user.username }}</h2>
     <form method="POST" action="{% url 'logout' %}">
         {% csrf_token %}
         <button type="submit">Cerrar sesión</button>
