@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.db.models import Q
 
+from django.http import HttpResponse
 from ...models import Inscripcion
 
 
@@ -10,11 +11,12 @@ def buscar_participante(request):
 
     inscripciones = Inscripcion.objects.none()
 
+    #busca por nombres
     if busqueda:
 
         inscripciones = Inscripcion.objects.filter(
             Q(usuario__username__icontains=busqueda)
-        ).select_related('usuario')
+        ).select_related('usuario','evento')
 
     return render(
         request,
@@ -24,3 +26,4 @@ def buscar_participante(request):
             'busqueda': busqueda
         }
     )
+
