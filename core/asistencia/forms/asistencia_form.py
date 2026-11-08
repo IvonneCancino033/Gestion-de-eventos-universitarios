@@ -1,5 +1,5 @@
 from django import forms
-from ..models import Asistencia
+from ...models import Asistencia
 
 class AsistenciaForm(forms.ModelForm):
 
@@ -14,7 +14,7 @@ class AsistenciaForm(forms.ModelForm):
         fields = ['Id', 'Estado']
 
         widgets = {
-            'Estado': forms.RadioSelect()
+            'Estado': forms.RadioSelect(choices=[(True,'Presente'),(False, 'Ausente')])
 
         },
         
