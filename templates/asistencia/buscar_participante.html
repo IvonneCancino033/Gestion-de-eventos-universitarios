@@ -29,6 +29,7 @@
 
         <h3>
             {{ inscripcion.usuario.username }}
+            {{ inscripcion.evento.nombre }}
         </h3>
 
         <a href="{% url 'registrar_asistencia' inscripcion.id %}">
@@ -40,12 +41,5 @@
         <p>No se encontraron participantes.</p>
 
     {% endfor %}
-
-
-    <p>Prueba de template</p>
-
-    <p>Busqueda: {{ busqueda }}</p>
-
-    <p>Inscripciones encontradas: {{ inscripciones|length }}</p>
 
 </body>

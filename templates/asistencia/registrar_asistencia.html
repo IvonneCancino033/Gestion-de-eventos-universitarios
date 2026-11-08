@@ -1,0 +1,15 @@
+<h1>Registrar asistencia</h1>
+
+<h3>Participante: {{ inscripcion.usuario.username }}</h3>
+
+<h3>Evento: {{ inscripcion.evento.nombre }}</h3>
+
+<form method="POST">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit">
+        Guardar asistencia
+    </button>
+</form>

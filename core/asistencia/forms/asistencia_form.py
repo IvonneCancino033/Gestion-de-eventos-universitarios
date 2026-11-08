@@ -11,10 +11,12 @@ class AsistenciaForm(forms.ModelForm):
 
     class Meta:
         model = Asistencia
-        fields = ['Id', 'Estado']
+        fields = ['estado']
 
         widgets = {
             'Estado': forms.RadioSelect(choices=[(True,'Presente'),(False, 'Ausente')])
 
         },
+
+
         
