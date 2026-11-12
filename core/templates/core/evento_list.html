@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block titulo %}Buscar eventos{% endblock %}
+
+{% block contenido %}
+<div class="container py-5">
+    <div class="mb-4">
+        <h1 class="h3 mb-1">Buscar eventos</h1>
+        <p class="mb-0">Encuentra actividades por nombre, categoría, fecha o estado.</p>
+    </div>
+
+    {# Filtros #}
+    <div class="card p-3 p-md-4 mb-4">
+        <form method="GET" class="row g-3 align-items-end">
+            <div class="col-12 col-lg-4">
+                <label for="{{ form.nombre.id_for_label }}" class="form-label">{{ form.nombre.label }}</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                    {{ form.nombre }}
+                </div>
+            </div>
+            <div class="col-6 col-lg-2">
+                <label for="{{ form.categoria.id_for_label }}" class="form-label">{{ form.categoria.label }}</label>
+                {{ form.categoria }}
+            </div>
+            <div class="col-6 col-lg-2">
+                <label for="{{ form.fecha.id_for_label }}" class="form-label">{{ form.fecha.label }}</label>
+                {{ form.fecha }}
+            </div>
+            <div class="col-6 col-lg-2">
+                <label for="{{ form.estado.id_for_label }}" class="form-label">{{ form.estado.label }}</label>
+                {{ form.estado }}
+            </div>
+            <div class="col-6 col-lg-2 d-flex gap-2">
+                <button type="submit" class="btn btn-primary flex-fill">Buscar</button>
+                <a href="{% url 'buscar_eventos' %}" class="btn btn-outline-light-gris" title="Limpiar filtros">
+                    <i class="bi bi-x-lg"></i>
+                </a>
+            </div>
+        </form>
+    </div>
+
+    {# Resultados #}
+    {% if eventos %}
+        <p class="small mb-3">{{ eventos|length }} evento{{ eventos|length|pluralize }} encontrado{{ eventos|length|pluralize }}</p>
+        <div class="row g-4">
+            {% for evento in eventos %}
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card card-evento h-100 p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <span class="categoria">{{ evento.categoria.nombre }}</span>
+                            <span class="badge badge-estado estado-{{ evento.estado }}">{{ evento.get_estado_display }}</span>
+                        </div>
+
+                        <h2 class="h5 mb-3">{{ evento.nombre }}</h2>
+
+                        <div class="dato-evento mb-2">
+                            <i class="bi bi-calendar3"></i>
+                            {{ evento.fecha_inicio|date:"d/m/Y H:i" }} - {{ evento.fecha_fin|date:"d/m/Y H:i" }}
+                        </div>
+                        <div class="dato-evento mb-4">
+                            <i class="bi bi-geo-alt"></i>
+                            {{ evento.get_lugar_display }}
+                        </div>
+
+                        <div class="mt-auto">
+                            <div class="d-flex justify-content-between small mb-1">
+                                <span>Cupos disponibles</span>
+                                <strong>{% if evento.cupos_disponibles > 0 %}{{ evento.cupos_disponibles }}{% else %}0{% endif %} de {{ evento.cupo_maximo }}</strong>
+                            </div>
+                            <div class="progress" role="progressbar" aria-label="Cupos ocupados">
+                                <div class="progress-bar" style="width: {% widthratio evento.inscritos evento.cupo_maximo 100 %}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="card estado-vacio text-center py-5">
+            <i class="bi bi-calendar-x mb-3"></i>
+            <h2 class="h5">No se encontraron resultados.</h2>
+            <p class="mb-3">Prueba con otros filtros o revisa todos los eventos.</p>
+            <div>
+                <a href="{% url 'buscar_eventos' %}" class="btn btn-outline-light-gris btn-sm">Ver todos los eventos</a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

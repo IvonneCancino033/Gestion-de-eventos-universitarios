@@ -1,15 +1,22 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio</title>
-</head>
-<body>
-    <h2>Bienvenid@, {{ user.username }}</h2>
-    <form method="POST" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit">Cerrar sesión</button>
-    </form>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block titulo %}Inicio{% endblock %}
+
+{% block contenido %}
+<div class="container py-5">
+    <h1 class="h3 mb-1">Bienvenid@, {{ user.username }}</h1>
+
+
+    <div class="row g-4">
+        <div class="col-12 col-md-6 col-lg-4">
+            <a href="{% url 'buscar_eventos' %}" class="text-decoration-none">
+                <div class="card card-evento h-100 p-4">
+                    <div class="login-marca mb-3"><i class="bi bi-search"></i></div>
+                    <h2 class="h5 mb-1">Buscar eventos</h2>
+                    <p class="mb-0 text-body">Encuentra actividades por nombre, categoría, fecha o estado.</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

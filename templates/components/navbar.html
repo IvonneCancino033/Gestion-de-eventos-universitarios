@@ -1,0 +1,32 @@
+{% with ruta=request.resolver_match.url_name %}
+<nav class="navbar navbar-expand-md navbar-dark navbar-institucional">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'inicio' %}">
+            <i class="bi bi-calendar-event"></i> Eventos Universitarios
+        </a>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                data-bs-target="#menuPrincipal" aria-controls="menuPrincipal"
+                aria-expanded="false" aria-label="Abrir menú">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="menuPrincipal">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link {% if ruta == 'inicio' %}active{% endif %}" href="{% url 'inicio' %}">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if ruta == 'buscar_eventos' %}active{% endif %}" href="{% url 'buscar_eventos' %}">Eventos</a>
+                </li>
+            </ul>
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-white-50 small"><i class="bi bi-person-circle me-1"></i>{{ user.username }}</span>
+                <form method="POST" action="{% url 'logout' %}" class="m-0">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-outline-light">Cerrar sesión</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</nav>
+{% endwith %}
