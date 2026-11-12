@@ -1,10 +1,10 @@
 
 from django.urls import path
-
+from .views.pagina_principal_asistencia import principal_staff
 from .views.asistencia_views import buscar_participante
 from .views.registrar_asistencia import registrar_asistencia
 from .views.mostrar_asistencia import mostrar
-
+from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
@@ -25,5 +25,12 @@ urlpatterns = [
         mostrar,
         name='mostrar_asistencia'
     ),
+    
+    path(
+        'asistencia/',
+        principal_staff,
+        name='pagina_principal_asistencia'
+    ),
 
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]

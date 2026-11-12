@@ -4,50 +4,57 @@
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
+        
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
+        
         <title>Mostrar asistencia</title>
     </head>
     <body>
+        <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">
+                Cerrar sesión
+            </button>
+        </form>
         <div class="container">
             <h1>Asistencia</h1>
             <h3>Evento: {{ evento.nombre }}</h3>
                       
-            <div class="row">
-                <div class="col">
-                    <strong> Asistente </strong>
-                </div>
-                <div class="col-2">
-                   <strong> Estado </strong>
-                    <strong> Asistente </strong>
-                </div>
-            </div>
-            {% for inscripcion in inscripciones %}
-            <div class="row">
-                <div class="col">
-                    {{ inscripcion.usuario.username }}
-                </div>
-                <div class="col-2">
-                    {% if inscripcion.asistencia.estado == True %}
-                        Presente
-                    {% elif inscripcion.asistencia.estado == False %}
-                        Ausente
-                    {% else %}
-                        Pendiente
-                    {% endif %}
-                </div>
-            </div>
-        {% empty %}
+            <table class="table table-striped table-hover" >
+                <thead>
+                    <tr>
+                        <th scope="col" class="col-2 " >id usuario</th>
+                        <th scope="col " class="col-3">Número de inscripcion</th>
+                        <th scope="col" class="col-4">Nombre de usuario</th>
+                        <th scope="col" class="col-3">Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for inscripcion in inscripciones %}
+                    <tr>
+                        <th scope="row">{{ inscripcion.usuario.id}}</th>
+                        <td>{{ inscripcion.id}}</td>    
+                        <td>{{ inscripcion.usuario.username }}</td>    
+                        <td>
+                            {% if inscripcion.asistencia.estado == True %}
+                                Presente
+                            {% elif inscripcion.asistencia.estado == False %}
+                                Ausente
+                            {% else %}
+                                Pendiente
+                            {% endif %}
+                        </td>
+                        {% empty %}
 
-            <p>No se encontraron participantes.</p>
+                        <p>No se encontraron participantes.</p>
 
-        {% endfor %}
-    </div>
-  
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+                    {% endfor %}    
+                    </tr>
+                </tbody>
+            </table>
+        </div>            
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
     </body>
 </html>

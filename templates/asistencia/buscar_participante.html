@@ -1,45 +1,50 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar sesión</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    
+    <title>Buscar participantes</title>
 </head>
 <body>
-     <h1>Buscar participante</h1>
+    
+    <div class="container">
 
-    <form method="GET">
-
-        <input
-            type="text"
-            name="q"
-            placeholder="Ingrese nombre de usuario"
-            value="{{ busqueda }}"
-        >
-
-        <button type="submit">
-            Buscar
-        </button>
-
-    </form>
-
-    <hr>
-
-    {% for inscripcion in inscripciones %}
-
+        <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">
+                Cerrar sesión
+            </button>
+        </form>
+        <h1>Buscar participante</h1>
+        
+        
+        <form method="GET" class="d-flex">
+            <input name="q" class="form-control me-2" type="search" placeholder="Ingrese el nombre de usuario" aria-label="Search" value="{{ busqueda }}">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+        
+        <hr>
+        
+        {% for inscripcion in inscripciones %}
+        
         <h3>
             {{ inscripcion.usuario.username }}
             {{ inscripcion.evento.nombre }}
         </h3>
-
+        
         <a href="{% url 'registrar_asistencia' inscripcion.id %}">
             Registrar asistencia
         </a>
-
-    {% empty %}
-
+        
+        {% empty %}
+        
         <p>No se encontraron participantes.</p>
-
-    {% endfor %}
-
+        
+        {% endfor %}
+        
+    </div>
 </body>

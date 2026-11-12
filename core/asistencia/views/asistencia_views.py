@@ -14,17 +14,25 @@ def buscar_participante(request):
 
     #busca por nombres
     if busqueda:
-
-        inscripciones = Inscripcion.objects.filter(
+        if request.user.is_staff:
+            inscripciones = Inscripcion.objects.filter(
+            Q(usuario__username__icontains=busqueda)    
+        ).select_related('usuario','evento')
+        
+        else:
+            inscripciones = Inscripcion.objects.filter(
             Q(usuario__username__icontains=busqueda),
             evento__organizador=request.user    
         ).select_related('usuario','evento')
 
+    
+    contexto = {
+                'inscripciones': inscripciones,
+                'busqueda': busqueda
+            }
+
     return render(
         request,
         'asistencia/buscar_participante.html',
-        {
-            'inscripciones': inscripciones,
-            'busqueda': busqueda
-        }
+        contexto
     )

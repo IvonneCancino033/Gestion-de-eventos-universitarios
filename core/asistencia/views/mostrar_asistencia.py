@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from ...models import Asistencia, Evento, Inscripcion
+from ...models import Evento, Inscripcion
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 
@@ -13,7 +13,7 @@ def mostrar(request, evento_id):
         )
 
 
-    if evento.organizador != request.user: #si no es organizador del evento no puede entrar
+    if evento.organizador != request.user and not request.user.is_staff:
         raise PermissionDenied
 
 
