@@ -4,6 +4,7 @@ from .views.pagina_principal_asistencia import principal_staff
 from .views.asistencia_views import buscar_participante
 from .views.registrar_asistencia import registrar_asistencia
 from .views.mostrar_asistencia import mostrar
+from .views.estadisticas import estadisticas
 from django.contrib.auth import views as auth_views
 
 
@@ -30,6 +31,12 @@ urlpatterns = [
         'asistencia/',
         principal_staff,
         name='pagina_principal_asistencia'
+    ),
+
+    path(
+        'estadisticas/<int:evento_id>/',
+        estadisticas,
+        name='estadisticas'
     ),
 
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
