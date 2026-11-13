@@ -15,5 +15,41 @@
     {% for mensaje in messages %}
         <p><strong>{{ mensaje }}</strong></p>
     {% endfor %}
+
+    <table>
+        <thead>
+            <tr>
+                <th scope="col">Usuario</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Correo</th>
+                <th scope="col">Roles</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.username }}</td>
+                    <td>{{ usuario.first_name }} {{ usuario.last_name }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>{% for grupo in usuario.groups.all %}{{ grupo.name }} {% empty %}Sin rol{% endfor %}</td>
+                    <td>{% if usuario.is_active %}Activa{% else %}Desactivada{% endif %}</td>
+                    <td>
+                        <a href="{% url 'usuarios:editar' usuario.pk %}">Editar</a>
+                        <!-- activar/desactivar va por POST porque modifica datos -->
+                        <form method="POST" action="{% url 'usuarios:cambiar_estado' usuario.pk %}" style="display:inline">
+                            {% csrf_token %}
+                            <button type="submit">
+                                {% if usuario.is_active %}Desactivar{% else %}Activar{% endif %}
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="6">No hay usuarios registrados.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
