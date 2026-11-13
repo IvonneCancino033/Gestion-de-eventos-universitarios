@@ -32,6 +32,9 @@
                     <div class="btn-group btn-group-sm ms-2">
                         <!-- Modificar -->
                         <a href="{% url 'editar_evento' evento.pk %}" class="btn btn-outline-primary">Editar</a>
+
+                        <!-- Reagendar -->
+                        <a href="{% url 'reagendar_evento' evento.pk %}" class="btn btn-outline-info">Reagendar</a>
                         
                         <!--Cancelar -->
                         <form method="post" action="{% url 'cancelar_evento' evento.pk %}" class="d-inline">
