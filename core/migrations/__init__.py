@@ -1,4 +1,1 @@
-from .categoria import Categoria
-from .evento import Evento
-from .inscripcion import Inscripcion
-from .asistencia import Asistencia
+# Este archivo debe mantenerse vacio para indicar que la carpeta es un paquete de migraciones.

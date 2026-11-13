@@ -1,15 +1,43 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio</title>
-</head>
-<body>
-    <h2>Bienvenida, {{ user.username }}</h2>
-    <form method="POST" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit">Cerrar sesión</button>
-    </form>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Inicio - Eventos Universitarios{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+  <h2 class="fw-bold text-dark">Bienvenid@, {{ user.username }}</h2>
+</div>
+
+<div class="row g-4">
+  <!-- Tarjeta de Buscar Eventos (Estilo Prototipo) -->
+  <div class="col-md-5 col-lg-4">
+    <div class="card card-custom p-3">
+      <div class="card-body">
+        <div class="icon-box-red mb-3">
+          <i class="bi bi-search fs-4"></i>
+        </div>
+        <h5 class="card-title fw-bold">Buscar eventos</h5>
+        <p class="card-text text-muted small">
+          Encuentra actividades por nombre, categoría, fecha o estado.
+        </p>
+        <a href="{% url 'lista_eventos' %}" class="btn btn-primary-custom w-100 mt-2">Buscar Eventos</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tarjeta de Gestión de Categorías -->
+  <div class="col-md-5 col-lg-4">
+    <div class="card card-custom p-3">
+      <div class="card-body">
+        <div class="icon-box-red mb-3">
+          <i class="bi bi-tags-fill fs-4"></i>
+        </div>
+        <h5 class="card-title fw-bold">Gestión de Categorías</h5>
+        <p class="card-text text-muted small">
+          Administra los tipos de eventos disponibles en el sistema.
+        </p>
+        <a href="{% url 'lista_categorias' %}" class="btn btn-outline-secondary w-100 mt-2">Ver Categorías</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

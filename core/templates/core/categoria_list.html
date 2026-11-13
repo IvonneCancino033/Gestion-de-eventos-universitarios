@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Categorías Universitarias{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-dark mb-0">Categorías Universitarias</h2>
+    <div>
+        <a href="{% url 'inicio' %}" class="btn btn-outline-secondary me-2">Volver</a>
+        <a href="{% url 'crear_categoria' %}" class="btn btn-primary-custom">Nueva Categoría</a>
+    </div>
+</div>
+
+<div class="card card-custom shadow-sm overflow-hidden">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0 align-middle">
+            <thead class="bg-primary-custom text-white">
+                <tr>
+                    <th class="ps-3 py-3">ID</th>
+                    <th class="py-3">Nombre</th>
+                    <th class="py-3">Descripción</th>
+                    <th class="py-3">Estado</th>
+                    <th class="text-end pe-3 py-3">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for categoria in categorias %}
+                <tr>
+                    <td class="ps-3">{{ categoria.pk }}</td>
+                    <td><strong>{{ categoria.nombre }}</strong></td>
+                    <td>{{ categoria.descripcion|default:"Sin descripción" }}</td>
+                    <td>
+                        {% if categoria.estado %}
+                            <span class="badge badge-disponible">Activa</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Inactiva</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end pe-3">
+                        <a href="{% url 'editar_categoria' categoria.pk %}" class="btn btn-sm btn-outline-primary">Editar</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center py-4 text-muted">No hay categorías registradas.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
