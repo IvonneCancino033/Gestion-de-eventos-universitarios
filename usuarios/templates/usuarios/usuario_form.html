@@ -1,0 +1,20 @@
+<!-- sirve para crear y para editar, cambia el titulo -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }}</title>
+</head>
+<body>
+    <h2>{{ titulo }}</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ formulario.as_p }} <!-- django arma los campos y muestra los errores -->
+        <button type="submit">Guardar</button>
+    </form>
+
+    <p><a href="{% url 'usuarios:lista' %}">Volver a la lista</a></p>
+</body>
+</html>

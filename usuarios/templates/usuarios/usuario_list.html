@@ -1,0 +1,19 @@
+<!-- lista de usuarios, solo la ve el administrador -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios</title>
+</head>
+<body>
+    <h2>Usuarios</h2>
+    <p><a href="{% url 'inicio' %}">Volver al inicio</a></p>
+    <p><a href="{% url 'usuarios:crear' %}">Nuevo usuario</a></p>
+
+    <!-- mensajes de exito o error -->
+    {% for mensaje in messages %}
+        <p><strong>{{ mensaje }}</strong></p>
+    {% endfor %}
+</body>
+</html>
