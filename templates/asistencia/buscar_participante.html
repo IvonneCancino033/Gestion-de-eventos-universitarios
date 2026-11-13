@@ -1,50 +1,127 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+
     <title>Buscar participantes</title>
 </head>
-<body>
-    
-    <div class="container">
 
-        <form method="POST" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit">
-                Cerrar sesión
-            </button>
-        </form>
-        <h1>Buscar participante</h1>
-        
-        
-        <form method="GET" class="d-flex">
-            <input name="q" class="form-control me-2" type="search" placeholder="Ingrese el nombre de usuario" aria-label="Search" value="{{ busqueda }}">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
-        
-        <hr>
-        
-        {% for inscripcion in inscripciones %}
-        
-        <h3>
-            {{ inscripcion.usuario.username }}
-            {{ inscripcion.evento.nombre }}
-        </h3>
-        
-        <a href="{% url 'registrar_asistencia' inscripcion.id %}">
-            Registrar asistencia
-        </a>
-        
-        {% empty %}
-        
-        <p>No se encontraron participantes.</p>
-        
-        {% endfor %}
-        
-    </div>
+<body>
+
+    <!-- Navbar -->
+    <header>
+        <nav class="navbar navbar-dark" style="background-color: #B02A37;">
+            <div class="container-fluid">
+
+                <span class="navbar-brand mb-0 h1">
+                    Eventos Universitarios
+                </span>
+
+                <form class="d-flex" method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button class="btn btn-outline-light" type="submit">
+                        Cerrar sesión
+                    </button>
+                </form>
+
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contenido principal -->
+    <main>
+
+        <div class="container mt-4 mb-4">
+
+            <h2 class="fw-bold mb-4">Buscar participantes</h2>
+
+            <!-- Formulario de búsqueda -->
+            <form method="GET" class="d-flex mb-4">
+
+                <input
+                    name="q"
+                    class="form-control me-2"
+                    type="search"
+                    placeholder="Ingrese el nombre de usuario"
+                    aria-label="Buscar participantes"
+                    value="{{ busqueda|default:'' }}"
+                >
+
+                <button class="btn btn-outline-success" type="submit">
+                    Buscar
+                </button>
+
+            </form>
+
+            <hr>
+
+            
+            <div class="table-responsive">
+
+                <table class="table table-striped table-hover align-middle">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">Nombre de usuario</th>
+                            <th scope="col">Evento</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for inscripcion in inscripciones %}
+
+                            <tr>
+
+                                <td>
+                                    {{ inscripcion.usuario.username }}
+                                </td>
+
+                                <td>
+                                    {{ inscripcion.evento.nombre }}
+                                </td>
+
+                                <td>
+                                    <a href="{% url 'registrar_asistencia' inscripcion.id %}"
+                                       class="btn btn-sm btn-primary">
+                                        Registrar asistencia
+                                    </a>
+                                </td>
+
+                            </tr>
+
+                        {% empty %}
+
+                            <tr>
+                                <td colspan="3" class="text-center text-muted py-4">
+                                    <em>No se encontraron participantes.</em>
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+
 </body>
+</html>

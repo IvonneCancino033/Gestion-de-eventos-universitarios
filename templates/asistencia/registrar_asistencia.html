@@ -1,15 +1,66 @@
-<h1>Registrar asistencia</h1>
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <title>Registrar asistencia</title>
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-dark" style="background-color: #B02A37;">
+                <div class="container-fluid">
 
-<h3>Participante: {{ inscripcion.usuario.username }}</h3>
+                    <span class="navbar-brand mb-0 h1">
+                        Eventos Universitarios
+                    </span>
 
-<h3>Evento: {{ inscripcion.evento.nombre }}</h3>
-
-<form method="POST">
-    {% csrf_token %}
-
-    {{ form.as_p }}
-
-    <button type="submit">
-        Guardar asistencia
-    </button>
-</form>
+                    <form class="d-flex" method="POST" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button class="btn btn-outline-light" type="submit">
+                            Cerrar sesión
+                        </button>
+                    </form>
+                    
+                </div>
+            </nav>
+        </header>
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h5>Evento: {{ inscripcion.evento.nombre }}</h5>
+                        <i class="bi bi-person-circle" style="font-size: 50px; color: #B02A37;"></i>
+                       <p>
+                           <strong>Nombre de usuario:</strong>
+                            {{ inscripcion.usuario.username }}
+                        </p>
+                        <p>
+                            <strong>Nombre:</strong>
+                            {{ inscripcion.usuario.first_name }} {{ inscripcion.usuario.last_name }}
+                        </p>
+                        <p>
+                            <strong>Id:</strong> 
+                            {{ inscripcion.usuario.id }} 
+                        </p>
+                        <form method="POST">
+                            {% csrf_token %}
+                        
+                            {{ form.as_p }}
+                        
+                            <button type="submit">
+                                Guardar asistencia
+                            </button>
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </body>
+</html>

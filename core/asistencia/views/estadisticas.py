@@ -11,7 +11,7 @@ def estadisticas(request, evento_id):
 
     evento = get_object_or_404(Evento, id=evento_id)
 
-    if evento.organizador != request.user and not request.user.is_superuser:
+    if evento.organizador != request.user and not request.user.is_staff:
         raise PermissionDenied
 
     # Obtener inscripciones activas
