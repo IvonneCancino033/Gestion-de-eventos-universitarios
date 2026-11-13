@@ -60,8 +60,6 @@ def estadisticas(request, evento_id):
         'estadisticas': estadisticas,
         'porcentaje_asistencia': porcentaje_asistencia,
         'porcentaje_ausencia': porcentaje_ausencia,
-        'presentes': presentes,
-        'ausentes': ausentes,
     }
 
     return render(
