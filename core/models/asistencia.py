@@ -1,10 +1,11 @@
 from django.db import models
 from .inscripcion import Inscripcion
 
+#asistencia de una inscripcion
 class Asistencia(models.Model):
     fecha_asistencia = models.DateTimeField(auto_now_add=True)#aiatencia del participante
     estado = models.CharField(max_length=50, default='Presente') 
-
+    # una sola asistencia por inscripcion
     inscripcion = models.OneToOneField(Inscripcion, on_delete=models.CASCADE, related_name='asistencia') #una inscripcion solo puede tener un solo resgistro de asistencia
 
     class Meta:

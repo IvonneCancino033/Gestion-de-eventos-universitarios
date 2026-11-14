@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}{% if categoria %}Editar{% else %}Nueva{% endif %} Categoría{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7 col-lg-6">
+        <div class="card card-custom overflow-hidden">
+            <div class="card-header bg-primary-custom text-white py-3">
+                <h4 class="mb-0 fw-bold">{% if categoria %}Editar{% else %}Nueva{% endif %} Categoría</h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label fw-bold small">Nombre de la Categoría</label>
+                        <input type="text" id="nombre" name="nombre" class="form-control" value="{{ categoria.nombre|default:'' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label fw-bold small">Descripción</label>
+                        <textarea id="descripcion" name="descripcion" class="form-control" rows="3">{{ categoria.descripcion|default:'' }}</textarea>
+                    </div>
+                    
+                    <div class="form-check form-switch mb-4">
+                        <input class="form-check-input" type="checkbox" id="estado" name="estado" {% if categoria %}{% if categoria.estado %}checked{% endif %}{% else %}checked{% endif %}>
+                        <label class="form-check-label fw-bold small" for="estado">Categoría Activa</label>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 border-top pt-3">
+                        <a href="{% url 'lista_categorias' %}" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary-custom">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
