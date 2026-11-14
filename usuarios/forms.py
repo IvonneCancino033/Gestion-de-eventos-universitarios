@@ -13,6 +13,12 @@ class UsuarioCrearForm(UserCreationForm):
         model = User
         fields = ["username", "first_name", "last_name", "email"]
 
+    # le pone la clase de bootstrap a todos los campos
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for campo in self.fields.values():
+            campo.widget.attrs["class"] = "form-control"
+
     # que no se repita el correo
     def clean_email(self):
         email = self.cleaned_data["email"]
@@ -31,6 +37,12 @@ class UsuarioEditarForm(forms.ModelForm):
         model = User
         fields = ["username", "first_name", "last_name", "email"]
         labels = {"username": "Nombre de usuario"}
+
+    # le pone la clase de bootstrap a todos los campos
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for campo in self.fields.values():
+            campo.widget.attrs["class"] = "form-control"
 
     # el correo no puede ser igual al de otro usuario (excluye al mismo)
     def clean_email(self):
