@@ -1,9 +1,9 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, User
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import UsuarioCrearForm, UsuarioEditarForm
+from .forms import RegistroForm, UsuarioCrearForm, UsuarioEditarForm
 from .permisos import grupo_requerido
 
 
@@ -60,3 +60,21 @@ def cambiar_estado_usuario(request, pk):
             estado = "activada" if usuario.is_active else "desactivada"
             messages.success(request, f"La cuenta de {usuario.username} fue {estado}.")
     return redirect("usuarios:lista")
+
+
+# registro de participantes, sin login porque es para gente que no tiene cuenta
+def registro(request):
+    if request.user.is_authenticated:
+        return redirect("inicio")  # si ya tiene sesion no necesita registrarse
+    if request.method == "POST":
+        formulario = RegistroForm(request.POST)
+        if formulario.is_valid():
+            usuario = formulario.save()
+            # todo el que se registra queda como Participante
+            participante, _ = Group.objects.get_or_create(name="Participante")
+            usuario.groups.add(participante)
+            messages.success(request, "Cuenta creada. Ya puedes iniciar sesión.")
+            return redirect("login")
+    else:
+        formulario = RegistroForm()
+    return render(request, "usuarios/registro.html", {"formulario": formulario})

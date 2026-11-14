@@ -17,6 +17,13 @@
         <h4 class="card-title text-center fw-bold mb-1">Gestión de Eventos Universitarios</h4>
         <p class="text-center text-muted small mb-4">Ingrese sus credenciales de acceso</p>
 
+        <!-- mensaje cuando alguien se acaba de registrar -->
+        {% for mensaje in messages %}
+        <div class="alert alert-success p-2 small text-center mb-3" role="alert">
+          {{ mensaje }}
+        </div>
+        {% endfor %}
+
         <!-- Bloque de errores de autenticacion-->
         {% if form.errors %}
         <div class="alert alert-danger p-2 small text-center mb-3" role="alert">
@@ -41,6 +48,12 @@
 
         <div class="text-center">
           <a href="{% url 'password_reset' %}" class="text-decoration-none small text-muted">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <!-- enlace para crear cuenta de participante -->
+        <div class="text-center mt-2">
+          <span class="small text-muted">¿No tiene cuenta?</span>
+          <a href="{% url 'usuarios:registro' %}" class="small fw-semibold text-decoration-none">Registrarse</a>
         </div>
       </div>
     </div>
