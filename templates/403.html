@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+<!-- titulo de la pestaña -->
+{% block title %}Acceso denegado{% endblock %}
+
+{% block content %}
+<!-- aviso cuando el usuario no tiene permiso -->
+<div class="mx-auto" style="max-width: 600px;">
+    <div class="card card-custom shadow-sm">
+        <div class="card-body p-4 text-center">
+            <div class="icon-box-red mx-auto mb-3"><i class="bi bi-shield-lock"></i></div>
+            <h2 class="fw-bold text-dark h4">Acceso denegado</h2>
+            <p class="text-muted">No tiene permisos para ver esta página.</p>
+            <a href="{% url 'inicio' %}" class="btn btn-primary-custom">Volver al inicio</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
