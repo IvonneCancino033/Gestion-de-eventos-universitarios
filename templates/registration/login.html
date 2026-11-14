@@ -14,8 +14,13 @@
         <p>Por favor intente nuevamente.</p>
     {% endif %}
 
+    <!-- mensaje cuando alguien se acaba de registrar -->
+    {% for mensaje in messages %}
+        <p><strong>{{ mensaje }}</strong></p>
+    {% endfor %}
+
     <form method="POST">
-        {% csrf_token %}
+        {% csrf_token %} <!-- tiene que ir dentro del form -->
         <div>
             <label for="usuario">Usuario</label>
             <input type="text" name="username" id="usuario" required>
@@ -26,5 +31,7 @@
         </div>
         <button type="submit">Iniciar sesión</button>
     </form>
+
+    <p>¿No tiene cuenta? <a href="{% url 'usuarios:registro' %}">Registrarse</a></p>
 </body>
 </html>

@@ -1,0 +1,21 @@
+<!-- registro para personas sin cuenta, quedan como participante -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrarse</title>
+</head>
+<body>
+    <h2>Crear cuenta de participante</h2>
+    <p>Regístrese para poder inscribirse en los eventos.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ formulario.as_p }} <!-- django muestra los campos y los errores -->
+        <button type="submit">Registrarme</button>
+    </form>
+
+    <p>¿Ya tiene cuenta? <a href="{% url 'login' %}">Iniciar sesión</a></p>
+</body>
+</html>

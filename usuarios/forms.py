@@ -9,6 +9,8 @@ class UsuarioCrearForm(UserCreationForm):
     last_name = forms.CharField(label="Apellido", max_length=150)
     email = forms.EmailField(label="Correo")
 
+    
+
     class Meta:
         model = User
         fields = ["username", "first_name", "last_name", "email"]
@@ -39,3 +41,8 @@ class UsuarioEditarForm(forms.ModelForm):
         if existe:
             raise forms.ValidationError("Ya existe otro usuario con este correo.")
         return email
+
+
+# registro publico, usa los mismos campos y validaciones que crear usuario
+class RegistroForm(UsuarioCrearForm):
+    pass
