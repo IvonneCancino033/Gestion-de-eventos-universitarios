@@ -15,7 +15,10 @@
     <div class="card card-custom p-4 shadow-sm">
       <div class="card-body">
         <h4 class="card-title text-center fw-bold mb-1">Crear cuenta de participante</h4>
-        <p class="text-center text-muted small mb-4">Regístrese para poder inscribirse en los eventos</p>
+        <p class="text-center text-muted small mb-1">Regístrese para poder inscribirse en los eventos</p>
+
+        <!-- aviso para el usuario -->
+        <p class="text-center small text-muted mb-3">Todos los campos son obligatorios.</p>
 
         <form method="post">
           {% csrf_token %}
@@ -33,6 +36,21 @@
           </div>
           {% endfor %}
 
+          <!-- barra que muestra que tan segura es la contraseña -->
+          <div class="mb-3">
+            <div class="small fw-semibold mb-1">Seguridad de la contraseña</div>
+            <div class="progress" style="height: 8px;">
+              <div id="barra-seguridad" class="progress-bar" role="progressbar" style="width: 0%;"></div>
+            </div>
+            <!-- requisitos, se marcan en verde cuando se cumplen -->
+            <ul class="list-unstyled small mt-2 mb-0">
+              <li id="req-largo" class="text-muted">○ Al menos 8 caracteres</li>
+              <li id="req-letras" class="text-muted">○ Tiene letras (no solo números)</li>
+              <li id="req-numero" class="text-muted">○ Tiene al menos un número</li>
+              <li id="req-mayuscula" class="text-muted">○ Tiene una mayúscula o un símbolo</li>
+            </ul>
+          </div>
+
           <button type="submit" class="btn btn-primary-custom w-100 py-2 mb-3">Registrarme</button>
         </form>
 
@@ -44,6 +62,37 @@
       </div>
     </div>
   </div>
+
+  <!-- revisa la contraseña mientras se escribe y actualiza la barra -->
+  <script>
+    const campo = document.getElementById("id_password1");  // nombre que le da django al campo
+    const barra = document.getElementById("barra-seguridad");
+
+    // marca un requisito en verde o en gris
+    function marcar(id, cumple, texto) {
+      const item = document.getElementById(id);
+      item.textContent = (cumple ? "✓ " : "○ ") + texto;
+      item.className = cumple ? "text-success" : "text-muted";
+    }
+
+    campo.addEventListener("input", function () {
+      const clave = campo.value;
+      const largo = clave.length >= 8;
+      const letras = /[a-zA-Z]/.test(clave);
+      const numero = /[0-9]/.test(clave);
+      const extra = /[A-Z]/.test(clave) || /[^a-zA-Z0-9]/.test(clave);
+
+      marcar("req-largo", largo, "Al menos 8 caracteres");
+      marcar("req-letras", letras, "Tiene letras (no solo números)");
+      marcar("req-numero", numero, "Tiene al menos un número");
+      marcar("req-mayuscula", extra, "Tiene una mayúscula o un símbolo");
+
+      // cuenta cuantos requisitos cumple (0 a 4) y ajusta la barra
+      const cumplidos = [largo, letras, numero, extra].filter(Boolean).length;
+      barra.style.width = (cumplidos * 25) + "%";
+      barra.className = "progress-bar " + (cumplidos <= 1 ? "bg-danger" : cumplidos <= 3 ? "bg-warning" : "bg-success");
+    });
+  </script>
 
 </body>
 </html>
