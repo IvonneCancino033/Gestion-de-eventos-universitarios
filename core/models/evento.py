@@ -3,13 +3,16 @@ from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 from .categoria import Categoria
 
-class Evento(models.Model): #clase evento
+#evento universitario
+class Evento(models.Model):
+    # opciones de estados del evento
     ESTADOS = [
         ('DISPONIBLE', 'Disponible'),
         ('CERRADO', 'Cerrado'),
         ('CANCELADO', 'Cancelado'),
+        ('REAGENDADO', 'Reagendado'),
     ]
-
+    # opciones de recintos del campus
     LUGARES = [
         ('AUDITORIO_PRINCIPAL', 'Auditorio Principal'),
         ('AULA_MAGNA', 'Aula Magna'),
@@ -19,7 +22,7 @@ class Evento(models.Model): #clase evento
         ('SALA_CONFERENCIAS', 'Sala de Conferencias'),
     ]
 
-    nombre = models.CharField(max_length=150) #nombre del evento
+    nombre = models.CharField(max_length=150)
     descripcion = models.TextField()
     
     fecha_inicio = models.DateTimeField() #cuando inicia el evento (fecha y hora)
@@ -27,9 +30,10 @@ class Evento(models.Model): #clase evento
 
     lugar = models.CharField(max_length=150, choices=LUGARES)
 
-    cupo_maximo = models.PositiveIntegerField(validators=[MinValueValidator(1)]) #la cantidad de asistentes
+    cupo_maximo = models.PositiveIntegerField(validators=[MinValueValidator(1)]) # minimo 1 cupo
     estado = models.CharField(max_length=20, choices=ESTADOS, default='DISPONIBLE')
 
+    # relaciones ORM
     categoria = models.ForeignKey(Categoria, on_delete=models.PROTECT, related_name='eventos')
     organizador = models.ForeignKey(User, on_delete=models.PROTECT, related_name='eventos_creados')
 

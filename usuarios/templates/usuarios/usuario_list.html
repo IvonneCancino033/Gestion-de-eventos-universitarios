@@ -1,56 +1,81 @@
-<!-- lista de usuarios, solo la ve el administrador -->
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Usuarios</title>
-</head>
-<body>
-    <h2>Usuarios</h2>
-    <p>Sesión iniciada como: <strong>{{ user.username }}</strong></p>
-    <p><a href="{% url 'inicio' %}">Volver al inicio</a></p>
-    <p><a href="{% url 'usuarios:crear' %}">Nuevo usuario</a></p>
+{% extends "base.html" %}
 
-    <!-- mensajes de exito o error -->
-    {% for mensaje in messages %}
-        <p><strong>{{ mensaje }}</strong></p>
-    {% endfor %}
+<!-- titulo de la pestaña -->
+{% block title %}Usuarios{% endblock %}
 
-    <table>
-        <thead>
-            <tr>
-                <th scope="col">Usuario</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Correo</th>
-                <th scope="col">Roles</th>
-                <th scope="col">Estado</th>
-                <th scope="col">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for usuario in usuarios %}
+{% block content %}
+<!-- encabezado con titulo y botones -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-dark mb-0">Usuarios</h2>
+    <div>
+        <a href="{% url 'inicio' %}" class="btn btn-outline-secondary me-2">Volver</a>
+        <a href="{% url 'usuarios:crear' %}" class="btn btn-primary-custom">Nuevo Usuario</a>
+    </div>
+</div>
+
+<!-- mensajes de exito o error -->
+{% for mensaje in messages %}
+    <div class="alert alert-{% if mensaje.tags == 'error' %}danger{% else %}{{ mensaje.tags }}{% endif %}">
+        {{ mensaje }}
+    </div>
+{% endfor %}
+
+<!-- tabla de usuarios -->
+<div class="card card-custom shadow-sm overflow-hidden">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0 align-middle">
+            <thead class="bg-primary-custom text-white">
                 <tr>
-                    <td>{{ usuario.username }}</td>
+                    <th class="ps-3 py-3">Usuario</th>
+                    <th class="py-3">Nombre</th>
+                    <th class="py-3">Correo</th>
+                    <th class="py-3">Roles</th>
+                    <th class="py-3">Estado</th>
+                    <th class="text-end pe-3 py-3">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                <tr>
+                    <td class="ps-3"><strong>{{ usuario.username }}</strong></td>
                     <td>{{ usuario.first_name }} {{ usuario.last_name }}</td>
                     <td>{{ usuario.email }}</td>
-                    <td>{% for grupo in usuario.groups.all %}{{ grupo.name }} {% empty %}Sin rol{% endfor %}</td>
-                    <td>{% if usuario.is_active %}Activa{% else %}Desactivada{% endif %}</td>
+                    <!-- grupos del usuario -->
                     <td>
-                        <a href="{% url 'usuarios:editar' usuario.pk %}">Editar</a>
-                        <!-- activar/desactivar va por POST porque modifica datos -->
-                        <form method="POST" action="{% url 'usuarios:cambiar_estado' usuario.pk %}" style="display:inline">
+                        {% for grupo in usuario.groups.all %}
+                            <span class="badge bg-secondary">{{ grupo.name }}</span>
+                        {% empty %}
+                            <span class="text-muted">Sin rol</span>
+                        {% endfor %}
+                    </td>
+                    <!-- estado de la cuenta -->
+                    <td>
+                        {% if usuario.is_active %}
+                            <span class="badge badge-disponible">Activa</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Desactivada</span>
+                        {% endif %}
+                    </td>
+                    <!-- botones de editar y activar/desactivar -->
+                    <td class="text-end pe-3">
+                        <a href="{% url 'usuarios:editar' usuario.pk %}" class="btn btn-sm btn-outline-primary">Editar</a>
+                        <form method="POST" action="{% url 'usuarios:cambiar_estado' usuario.pk %}" class="d-inline">
                             {% csrf_token %}
-                            <button type="submit">
-                                {% if usuario.is_active %}Desactivar{% else %}Activar{% endif %}
-                            </button>
+                            {% if usuario.is_active %}
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Desactivar</button>
+                            {% else %}
+                                <button type="submit" class="btn btn-sm btn-outline-success">Activar</button>
+                            {% endif %}
                         </form>
                     </td>
                 </tr>
-            {% empty %}
-                <tr><td colspan="6">No hay usuarios registrados.</td></tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</body>
-</html>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center py-4 text-muted">No hay usuarios registrados.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

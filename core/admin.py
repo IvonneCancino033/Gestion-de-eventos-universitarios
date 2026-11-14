@@ -1,5 +1,8 @@
-from django.contrib import admin #importar la administracion de django
-from .models import Categoria, Evento, Inscripcion, Asistencia #importa las 4 clases
+from django.contrib import admin
+from .models.categoria import Categoria
+from .models.evento import Evento
+from .models.inscripcion import Inscripcion
+from .models.asistencia import Asistencia
 
 @admin.register(Categoria) #registrar categoria
 class CategoriaAdmin(admin.ModelAdmin):#clase catgeoria en el panel

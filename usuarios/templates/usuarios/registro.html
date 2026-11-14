@@ -1,21 +1,49 @@
-<!-- registro para personas sin cuenta, quedan como participante -->
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrarse</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrarse - Eventos Universitarios</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/custom.css' %}">
 </head>
-<body>
-    <h2>Crear cuenta de participante</h2>
-    <p>Regístrese para poder inscribirse en los eventos.</p>
 
-    <form method="POST">
-        {% csrf_token %}
-        {{ formulario.as_p }} <!-- django muestra los campos y los errores -->
-        <button type="submit">Registrarme</button>
-    </form>
+<body class="bg-light d-flex align-items-center justify-content-center min-vh-100 py-4">
 
-    <p>¿Ya tiene cuenta? <a href="{% url 'login' %}">Iniciar sesión</a></p>
+  <div class="container" style="max-width: 480px;">
+    <div class="card card-custom p-4 shadow-sm">
+      <div class="card-body">
+        <h4 class="card-title text-center fw-bold mb-1">Crear cuenta de participante</h4>
+        <p class="text-center text-muted small mb-4">Regístrese para poder inscribirse en los eventos</p>
+
+        <form method="post">
+          {% csrf_token %}
+          <!-- campos del formulario con su ayuda y errores -->
+          {% for campo in formulario %}
+          <div class="mb-3">
+            <label for="{{ campo.id_for_label }}" class="form-label small fw-semibold">{{ campo.label }}</label>
+            {{ campo }}
+            {% if campo.help_text %}
+            <div class="form-text small">{{ campo.help_text|safe }}</div>
+            {% endif %}
+            {% for error in campo.errors %}
+            <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+          </div>
+          {% endfor %}
+
+          <button type="submit" class="btn btn-primary-custom w-100 py-2 mb-3">Registrarme</button>
+        </form>
+
+        <!-- enlace para volver al login -->
+        <div class="text-center">
+          <span class="small text-muted">¿Ya tiene cuenta?</span>
+          <a href="{% url 'login' %}" class="small fw-semibold text-decoration-none">Iniciar sesión</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>

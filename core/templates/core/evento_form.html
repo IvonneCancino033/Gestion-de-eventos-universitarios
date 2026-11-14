@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-7">
+        <div class="card card-custom overflow-hidden">
+            <div class="card-header bg-primary-custom text-white py-3">
+                <h4 class="mb-0 fw-bold">{{ titulo }}</h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        {% for field in form %}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold small">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ field.errors|striptags }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                        <a href="{% url 'lista_eventos' %}" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary-custom">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

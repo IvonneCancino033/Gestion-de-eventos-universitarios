@@ -1,0 +1,1 @@
+# Este archivo debe mantenerse vacio para indicar que la carpeta es un paquete de migraciones.
