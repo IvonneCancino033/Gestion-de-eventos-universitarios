@@ -9,8 +9,6 @@ class UsuarioCrearForm(UserCreationForm):
     last_name = forms.CharField(label="Apellido", max_length=150)
     email = forms.EmailField(label="Correo")
 
-    
-
     class Meta:
         model = User
         fields = ["username", "first_name", "last_name", "email"]
