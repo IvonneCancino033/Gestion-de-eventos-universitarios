@@ -7,11 +7,8 @@ from .models.categoria import Categoria
 from .models.evento import Evento
 from .forms import EventoForm
 from django.db.models import Count, ExpressionWrapper, F, IntegerField, Q
-from django.shortcuts import get_object_or_404, redirect, render
 from .forms import BuscarEventoForm
-from .models import Categoria, Evento
 from usuarios.permisos import grupo_requerido
-from .models import Inscripcion
 
 # --- VISTA PRINCIPAL ---
 @login_required
