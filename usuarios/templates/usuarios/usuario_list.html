@@ -58,6 +58,7 @@
                     </td>
                     <!-- botones de editar y activar/desactivar -->
                     <td class="text-end pe-3">
+                        <a href="{% url 'usuarios:roles' usuario.pk %}" class="btn btn-sm btn-outline-secondary">Roles</a>
                         <a href="{% url 'usuarios:editar' usuario.pk %}" class="btn btn-sm btn-outline-primary">Editar</a>
                         <form method="POST" action="{% url 'usuarios:cambiar_estado' usuario.pk %}" class="d-inline">
                             {% csrf_token %}
