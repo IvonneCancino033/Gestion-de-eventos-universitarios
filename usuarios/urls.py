@@ -10,4 +10,5 @@ urlpatterns = [
     path("editar/<int:pk>/", views.editar_usuario, name="editar"),
     path("estado/<int:pk>/", views.cambiar_estado_usuario, name="cambiar_estado"),
     path("registro/", views.registro, name="registro"),  # registro publico (HU-02)
+    path("roles/<int:pk>/", views.asignar_roles, name="roles"),  # asignar roles (HU-04)
 ]

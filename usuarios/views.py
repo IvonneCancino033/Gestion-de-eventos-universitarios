@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group, User
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import RegistroForm, UsuarioCrearForm, UsuarioEditarForm
+from .forms import AsignarRolesForm, RegistroForm, UsuarioCrearForm, UsuarioEditarForm
 from .permisos import grupo_requerido
 
 
@@ -78,3 +78,20 @@ def registro(request):
     else:
         formulario = RegistroForm()
     return render(request, "usuarios/registro.html", {"formulario": formulario})
+
+
+# cambiar los roles de un usuario
+@login_required
+@grupo_requerido("Administrador")
+def asignar_roles(request, pk):
+    usuario = get_object_or_404(User, pk=pk)
+    if request.method == "POST":
+        formulario = AsignarRolesForm(request.POST)
+        if formulario.is_valid():
+            usuario.groups.set(formulario.cleaned_data["roles"])
+            messages.success(request, f"Roles de {usuario.username} actualizados.")
+            return redirect("usuarios:lista")
+    else:
+        # muestra marcados los roles que ya tiene
+        formulario = AsignarRolesForm(initial={"roles": usuario.groups.all()})
+    return render(request, "usuarios/asignar_roles.html", {"formulario": formulario, "usuario_editado": usuario})
