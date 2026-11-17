@@ -15,7 +15,7 @@ venv/
 !.env.example
 
 # Base de datos SQLite3 local
-db.sqlite3
+*.sqlite3
 *.log
 
 # Archivos del editor y del sistema operativo
