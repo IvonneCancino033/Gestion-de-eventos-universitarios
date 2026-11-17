@@ -8,10 +8,10 @@ from .models.evento import Evento
 from .forms import EventoForm
 from django.db.models import Count, ExpressionWrapper, F, IntegerField, Q
 from django.shortcuts import get_object_or_404, redirect, render
-
 from .forms import BuscarEventoForm
 from .models import Categoria, Evento
-
+from usuarios.permisos import grupo_requerido
+from .models import Inscripcion
 
 # --- VISTA PRINCIPAL ---
 @login_required
@@ -157,7 +157,7 @@ def buscar_eventos(request):
                 F("cupo_maximo") - F("inscritos"), output_field=IntegerField()
             )
         )
-        .order_by("fecha_inicio")  # Count() anula el ordering del Meta
+        .order_by("fecha_inicio") 
     )
 
     if form.is_valid():
@@ -177,3 +177,34 @@ def buscar_eventos(request):
 
     return render(request, "core/evento_buscar.html", {"form": form, "eventos": eventos})
 
+# HU-14: consultar inscripciones de un evento
+
+@login_required
+@grupo_requerido("Organizador", "Administrador")
+def consultar_inscripciones(request):
+    #  solo los eventos de este organizador
+    mis_eventos = Evento.objects.filter(organizador=request.user).order_by('-fecha_inicio')
+
+    # Valores por defecto (cuando aún no se elige evento)
+    evento = None
+    inscripciones = []
+    ocupados = 0
+    disponibles = 0
+
+    # Si el usuario eligió un evento en el desplegable 
+    evento_id = request.GET.get('evento')
+    if evento_id:
+        evento = get_object_or_404(mis_eventos, pk=evento_id)
+        #  participantes y estado de cada inscripción
+        inscripciones = evento.inscripciones.select_related('usuario').order_by('fecha_inscripcion')
+        #  cupos ocupados y disponibles
+        ocupados = inscripciones.filter(estado='ACTIVA').count()
+        disponibles = evento.cupo_maximo - ocupados
+
+    return render(request, 'core/inscripciones_evento.html', {
+        'mis_eventos': mis_eventos,
+        'evento': evento,
+        'inscripciones': inscripciones,
+        'ocupados': ocupados,
+        'disponibles': disponibles,
+    })
