@@ -84,6 +84,42 @@ body {
 .estado-ACTIVA { background-color: #198754 !important; color: #FFFFFF !important; }
 .estado-CANCELADA { background-color: var(--primary-red) !important; color: #FFFFFF !important; }
 
+/* estados de evento */
+.badge-estado { font-weight: 500; padding: .35em .7em; border-radius: 2rem; }
+.estado-DISPONIBLE { background-color: #E8F5EC; color: #1E7A3C; }
+.estado-CERRADO { background-color: #EDEDED; color: #555555; }
+.estado-CANCELADO { background-color: #FBE7EB; color: var(--dark-red); }
+.estado-REAGENDADO { background-color: #FFF4E5; color: #8A5300; }
+
+/* tarjetas de eventos (buscar eventos) */
+.card-evento { transition: box-shadow .2s ease, transform .2s ease; }
+.card-evento:hover { box-shadow: 0 .5rem 1.25rem rgba(0, 0, 0, .06); transform: translateY(-2px); }
+.card-evento .categoria {
+  color: var(--primary-red);
+  font-size: .75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+.dato-evento { font-size: .9rem; }
+.dato-evento i { color: #A6A6A6; width: 1.25rem; }
+
+/* barra de cupos dentro de las tarjetas de eventos */
+.card-evento .progress { height: .4rem; background-color: #F5F5F5; }
+.card-evento .progress-bar { background-color: var(--primary-red); }
+
+/* boton gris con borde (limpiar filtros) */
+.btn-outline-light-gris {
+  --bs-btn-color: #555555;
+  --bs-btn-border-color: #A6A6A6;
+  --bs-btn-hover-bg: #F5F5F5;
+  --bs-btn-hover-border-color: #555555;
+  --bs-btn-hover-color: #555555;
+}
+
+/* mensaje cuando no hay resultados */
+.estado-vacio i { font-size: 2.5rem; color: #A6A6A6; }
+
 footer {
   margin-top: auto;
 }
