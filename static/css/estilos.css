@@ -1,0 +1,110 @@
+/* Paleta institucional */
+:root {
+    --burdeo: #BA0C2F;
+    --burdeo-oscuro: #8F0925;
+    --gris-oscuro: #555555;
+    --gris-claro: #A6A6A6;
+    --blanco-grisaceo: #F5F5F5;
+    --blanco: #FFFFFF;
+
+    /* Integración con Bootstrap */
+    --bs-primary: var(--burdeo);
+    --bs-primary-rgb: 186, 12, 47;
+    --bs-body-color: var(--gris-oscuro);
+    --bs-body-bg: var(--blanco-grisaceo);
+    --bs-border-color: #E2E2E2;
+    --bs-link-color: var(--burdeo);
+    --bs-link-hover-color: var(--burdeo-oscuro);
+    --bs-link-color-rgb: 186, 12, 47;
+    --bs-link-hover-color-rgb: 143, 9, 37;
+}
+
+body {
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main { flex: 1; }
+
+h1, h2, h3, h4, h5 { color: #2B2B2B; font-weight: 600; }
+
+/* Barra de navegación */
+.navbar-institucional { background: var(--burdeo); }
+.navbar-institucional .navbar-brand { font-weight: 600; letter-spacing: .2px; }
+.navbar-institucional .nav-link { color: rgba(255, 255, 255, .8); }
+.navbar-institucional .nav-link:hover,
+.navbar-institucional .nav-link.active { color: var(--blanco); }
+
+/* Botones */
+.btn-primary {
+    --bs-btn-bg: var(--burdeo);
+    --bs-btn-border-color: var(--burdeo);
+    --bs-btn-hover-bg: var(--burdeo-oscuro);
+    --bs-btn-hover-border-color: var(--burdeo-oscuro);
+    --bs-btn-active-bg: var(--burdeo-oscuro);
+    --bs-btn-active-border-color: var(--burdeo-oscuro);
+    --bs-btn-disabled-bg: var(--burdeo);
+    --bs-btn-disabled-border-color: var(--burdeo);
+}
+.btn-outline-light-gris {
+    --bs-btn-color: var(--gris-oscuro);
+    --bs-btn-border-color: var(--gris-claro);
+    --bs-btn-hover-bg: var(--blanco-grisaceo);
+    --bs-btn-hover-border-color: var(--gris-oscuro);
+    --bs-btn-hover-color: var(--gris-oscuro);
+}
+
+/* Formularios */
+.form-control, .form-select { border-color: var(--gris-claro); }
+.form-control:focus, .form-select:focus {
+    border-color: var(--burdeo);
+    box-shadow: 0 0 0 .2rem rgba(186, 12, 47, .15);
+}
+.form-label { font-size: .85rem; font-weight: 500; margin-bottom: .3rem; }
+
+/* Tarjetas */
+.card {
+    border: 1px solid var(--bs-border-color);
+    border-radius: .75rem;
+    background: var(--blanco);
+}
+.card-evento { transition: box-shadow .2s ease, transform .2s ease; }
+.card-evento:hover { box-shadow: 0 .5rem 1.25rem rgba(0, 0, 0, .06); transform: translateY(-2px); }
+.card-evento .categoria {
+    color: var(--burdeo);
+    font-size: .75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+.dato-evento { font-size: .9rem; }
+.dato-evento i { color: var(--gris-claro); width: 1.25rem; }
+
+/* Estados del evento */
+.badge-estado { font-weight: 500; padding: .35em .7em; border-radius: 2rem; }
+.estado-DISPONIBLE { background: #E8F5EC; color: #1E7A3C; }
+.estado-CERRADO { background: #EDEDED; color: var(--gris-oscuro); }
+.estado-CANCELADO { background: #FBE7EB; color: var(--burdeo-oscuro); }
+
+/* Barra de cupos */
+.progress { height: .4rem; background: var(--blanco-grisaceo); }
+.progress-bar { background: var(--burdeo); }
+
+/* Estado vacío */
+.estado-vacio i { font-size: 2.5rem; color: var(--gris-claro); }
+
+/* Login */
+.login-wrapper { min-height: 100vh; }
+.login-marca {
+    width: 3rem; height: 3rem;
+    border-radius: .75rem;
+    background: var(--burdeo);
+    color: var(--blanco);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+}
+
+/* Pie de página */
+.footer { color: var(--gris-claro); font-size: .8rem; }

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        
+        <title>Pagina principal</title>
+    </head>
+    <header>
+        <nav class="navbar navbar-dark" style="background-color: #B02A37;">
+            <div class="container-fluid">
+
+                <span class="navbar-brand mb-0 h1">
+                    Eventos Universitarios
+                </span>
+
+                <form class="d-flex" method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button class="btn btn-outline-light" type="submit">
+                        Cerrar sesión
+                    </button>
+                </form>
+
+            </div>
+        </nav>
+    </header>
+    <body>
+        <div class="container">
+            <h1>Usuario: {{ usuario.username }} Id: {{ usuario.id }} Nombre: {{ usuario.name }} </h1>
+                               
+            <table class="table table-striped table-hover" >
+                <thead>
+                    <tr>
+                        <th scope="col" class="col-2 " >Evento</th>
+                        <th scope="col" class="col-2 " >Inicio</th>
+                        <th scope="col" class="col-2 " >Fin</th>
+                        <th scope="col" class="col-2 " >Estado actual</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for inscripcion in inscripciones %}
+                    <th scope="row">{{ inscripcion.evento.nombre }}</th>
+                    <td> {{ inscripcion.evento.fecha_inicio }} </td>
+                    <td> {{ inscripcion.evento.fecha_fin }} </td>z
+                    <td> {{ inscripcion.asistencia }} </td>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
+                        

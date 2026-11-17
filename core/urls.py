@@ -12,6 +12,7 @@ urlpatterns = [
     
     # eventos 
     path('eventos/', views.lista_eventos, name='lista_eventos'),
+    path('eventos/buscar/', views.buscar_eventos, name='buscar_eventos'),
     path('eventos/nuevo/', views.crear_evento, name='crear_evento'),
     path('eventos/editar/<int:pk>/', views.editar_evento, name='editar_evento'),
     path('eventos/cancelar/<int:pk>/', views.cancelar_evento, name='cancelar_evento'),
