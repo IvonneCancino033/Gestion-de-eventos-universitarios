@@ -10,4 +10,5 @@ urlpatterns = [
     path("usuarios/", include("usuarios.urls")),
     # Aplicación principal
     path("", include("core.urls")),
+    path("", include('core.asistencia.urls')),
 ]

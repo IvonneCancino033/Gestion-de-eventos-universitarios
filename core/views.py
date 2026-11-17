@@ -6,6 +6,11 @@ from django.http import HttpResponseForbidden
 from .models.categoria import Categoria
 from .models.evento import Evento
 from .forms import EventoForm
+from django.db.models import Count, ExpressionWrapper, F, IntegerField, Q
+from django.shortcuts import get_object_or_404, redirect, render
+
+from .forms import BuscarEventoForm
+from .models import Categoria, Evento
 
 
 # --- VISTA PRINCIPAL ---
@@ -136,3 +141,39 @@ def reagendar_evento(request, pk):
         'form': form, 
         'titulo': f'Reagendar Evento: {evento.nombre}'
     })
+# HU-12: buscar eventos por nombre, categoría, fecha o estado
+@login_required
+def buscar_eventos(request):
+    form = BuscarEventoForm(request.GET or None)
+
+    # Cupos disponibles = cupo máximo - inscripciones activas
+    eventos = (
+        Evento.objects.select_related("categoria")
+        .annotate(
+            inscritos=Count("inscripciones", filter=Q(inscripciones__estado="ACTIVA"))
+        )
+        .annotate(
+            cupos_disponibles=ExpressionWrapper(
+                F("cupo_maximo") - F("inscritos"), output_field=IntegerField()
+            )
+        )
+        .order_by("fecha_inicio")  # Count() anula el ordering del Meta
+    )
+
+    if form.is_valid():
+        datos = form.cleaned_data
+        if datos["nombre"]:
+            eventos = eventos.filter(nombre__icontains=datos["nombre"].strip())
+        if datos["categoria"]:
+            eventos = eventos.filter(categoria=datos["categoria"])
+        if datos["fecha"]:
+            # Eventos que ocurren ese día (incluye eventos de varios días)
+            eventos = eventos.filter(
+                fecha_inicio__date__lte=datos["fecha"],
+                fecha_fin__date__gte=datos["fecha"],
+            )
+        if datos["estado"]:
+            eventos = eventos.filter(estado=datos["estado"])
+
+    return render(request, "core/evento_buscar.html", {"form": form, "eventos": eventos})
+
