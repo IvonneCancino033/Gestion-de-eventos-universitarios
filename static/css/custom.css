@@ -80,6 +80,10 @@ body {
   color: #FFFFFF !important;
 }
 
+/* estados de inscripcion (HU-14) */
+.estado-ACTIVA { background-color: #198754 !important; color: #FFFFFF !important; }
+.estado-CANCELADA { background-color: var(--primary-red) !important; color: #FFFFFF !important; }
+
 footer {
   margin-top: auto;
 }
