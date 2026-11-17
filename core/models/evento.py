@@ -3,16 +3,17 @@ from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 from .categoria import Categoria
 
-#evento universitario
+#Modelo evento 
+#Centraliza la informacion, horarios y espacios fisicos de las actividades universitarias
 class Evento(models.Model):
-    # opciones de estados del evento
+    # Opciones de estados del evento
     ESTADOS = [
         ('DISPONIBLE', 'Disponible'),
         ('CERRADO', 'Cerrado'),
         ('CANCELADO', 'Cancelado'),
         ('REAGENDADO', 'Reagendado'),
     ]
-    # opciones de recintos del campus
+    # Opciones de recintos del campus universitario
     LUGARES = [
         ('AUDITORIO_PRINCIPAL', 'Auditorio Principal'),
         ('AULA_MAGNA', 'Aula Magna'),
@@ -21,7 +22,7 @@ class Evento(models.Model):
         ('LAB_BIOINFORMATICA', 'Laboratorio de Bioinformática'),
         ('SALA_CONFERENCIAS', 'Sala de Conferencias'),
     ]
-
+    # Campos principales del evento
     nombre = models.CharField(max_length=150)
     descripcion = models.TextField()
     

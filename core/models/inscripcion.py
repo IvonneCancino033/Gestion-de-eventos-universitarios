@@ -12,7 +12,8 @@ class Inscripcion(models.Model):
 
     fecha_inscripcion = models.DateTimeField(auto_now_add=True)
     estado = models.CharField(max_length=20, choices=ESTADOS, default='ACTIVA')
-
+    
+    # Llaves foraneas del usuario y el evento
     usuario = models.ForeignKey(User, on_delete=models.PROTECT, related_name='inscripciones')
     evento = models.ForeignKey(Evento, on_delete=models.PROTECT, related_name='inscripciones')
 
@@ -20,6 +21,7 @@ class Inscripcion(models.Model):
         verbose_name = "Inscripción"
         verbose_name_plural = "Inscripciones"
         # Permite una sola inscripción ACTIVA por usuario en un mismo evento
+        #La condición condition=models.Q, al cancelar la inscripción, se libera la restricción.
         constraints = [
             models.UniqueConstraint(
                 fields=['usuario', 'evento'],
