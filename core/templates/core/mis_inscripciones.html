@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Mis inscripciones{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="mb-4">
+        <h1 class="h3 mb-1">Mis inscripciones</h1>
+        <p class="mb-0">Revisa los eventos en los que estás inscrito.</p>
+    </div>
+
+    {% if inscripciones %}
+        {# Criterios 2 y 3: eventos con fecha, lugar, estado del evento y estado de la inscripción #}
+        <div class="card p-3 p-md-4">
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Evento</th>
+                            <th>Fecha</th>
+                            <th>Lugar</th>
+                            <th>Estado del evento</th>
+                            <th>Mi inscripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for inscripcion in inscripciones %}
+                            <tr>
+                                <td>{{ inscripcion.evento.nombre }}</td>
+                                <td>{{ inscripcion.evento.fecha_inicio|date:"d/m/Y H:i" }}</td>
+                                <td>{{ inscripcion.evento.lugar.nombre }}</td>
+                                <td>
+                                    <span class="badge badge-estado estado-{{ inscripcion.evento.estado }}">
+                                        {{ inscripcion.evento.get_estado_display }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-estado estado-{{ inscripcion.estado }}">
+                                        {{ inscripcion.get_estado_display }}
+                                    </span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% else %}
+        {# Criterio 4: si no tiene inscripciones, se informa #}
+        <div class="card estado-vacio text-center py-5">
+            <i class="bi bi-calendar-x mb-3"></i>
+            <h2 class="h5">Aún no tienes inscripciones.</h2>
+            <p class="mb-0">Cuando te inscribas en un evento, aparecerá aquí.</p>
+            <a href="{% url 'lista_eventos' %}" class="btn btn-primary-custom mt-3 mx-auto">Ver eventos</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
