@@ -34,7 +34,6 @@
         <ul class="navbar-nav me-auto ms-3">
           <li class="nav-item"><a class="nav-link" href="{% url 'inicio' %}">Inicio</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'lista_eventos' %}">Eventos</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'lista_categorias' %}">Categorías</a></li>
          
           <!-- solo participantes ven el enlace a sus inscripciones -->
           {% for grupo in user.groups.all %}
@@ -43,7 +42,7 @@
             {% endif %}
           {% endfor %}
 
-          
+         
           <!-- organizadores y administradores ven el enlace a inscripciones -->
           {% if user.is_superuser %}
             <li class="nav-item"><a class="nav-link" href="{% url 'consultar_inscripciones' %}">Inscripciones</a></li>
@@ -54,14 +53,16 @@
               {% endif %}
             {% endfor %}
           {% endif %}
-          <!-- solo administradores ven el enlace a usuarios y lugares -->
+          <!-- solo administradores ven el enlace a usuarios, categorias y lugares -->
           {% if user.is_superuser %}
             <li class="nav-item"><a class="nav-link" href="{% url 'usuarios:lista' %}">Usuarios</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'lista_categorias' %}">Categorías</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'lista_lugares' %}">Lugares</a></li>
           {% else %}
             {% for grupo in user.groups.all %}
               {% if grupo.name == "Administrador" %}
                 <li class="nav-item"><a class="nav-link" href="{% url 'usuarios:lista' %}">Usuarios</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'lista_categorias' %}">Categorías</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'lista_lugares' %}">Lugares</a></li>
               {% endif %}
             {% endfor %}
