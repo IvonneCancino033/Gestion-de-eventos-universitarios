@@ -9,9 +9,10 @@ from .forms import EventoForm
 from django.db.models import Count, ExpressionWrapper, F, IntegerField, Q
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import BuscarEventoForm
-from .models import Categoria, Evento
+from .models import Categoria, Evento, Inscripcion
 from usuarios.permisos import grupo_requerido
-from .models import Inscripcion
+from django.contrib import messages
+from django.utils import timezone
 
 # --- VISTA PRINCIPAL ---
 @login_required
@@ -176,6 +177,38 @@ def buscar_eventos(request):
             eventos = eventos.filter(estado=datos["estado"])
 
     return render(request, "core/evento_buscar.html", {"form": form, "eventos": eventos})
+
+#HU-13: inscribirse en un evento 
+
+@login_required
+@grupo_requerido("Participante")
+def inscribirse_en_evento(request, pk):
+    evento = get_object_or_404(Evento, pk=pk)
+
+    if request.method == 'POST':
+        ocupados = evento.inscripciones.filter(estado = 'ACTIVA').count()
+        disponibles = evento.cupo_maximo - ocupados
+
+    #para poder inscribirse el evento debe estar abierto a inscripciones
+        if evento.estado not in ('DISPONIBLE', 'REAGENDADO'):
+            messages.error (request, "Este evento ya no acepta más inscripciones.")
+    #no se puede inscribir en un evento terminado
+        elif evento.fecha_fin <= timezone.now():
+            messages.error (request, "Este evento ha finalizado.") 
+    #no puede tener dos inscripciones activas en el mismo evento 
+
+        elif evento.inscripciones.filter(usuario=request.user, estado = 'ACTIVA'). exists():
+            messages.error (request, "Ya estás inscrito en este evento.")
+
+    #para poder inscribirse debe haber al menos un cupo
+        elif disponibles <= 0:
+            messages.error(request, "No hay cupos disponibles para este evento.")
+
+        else:
+            Inscripcion.objects.create(usuario=request.user, evento=evento)
+            messages.success(request, f"Te inscribiste en {evento.nombre}.")
+
+    return redirect ('lista_eventos')
 
 # HU-14: consultar inscripciones de un evento
 
