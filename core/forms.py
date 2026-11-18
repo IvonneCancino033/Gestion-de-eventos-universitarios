@@ -1,5 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 from .models.evento import Evento
 from django.db.models import Q
 
@@ -31,15 +32,21 @@ class EventoForm(forms.ModelForm):
         fecha_inicio = cleaned_data.get('fecha_inicio')
         fecha_fin = cleaned_data.get('fecha_fin')
         lugar = cleaned_data.get('lugar')
+        current_year = timezone.now().year
 
         if fecha_inicio and fecha_fin:
-            # 1. Validar que la fecha de fin sea posterior a la de inicio
+            # Validar que no se programen eventos en años pasados
+            if fecha_inicio.year < current_year:
+                raise ValidationError({
+                    'fecha_inicio': "No se pueden programar eventos en años que ya pasaron."
+                })
+            # Validar que la fecha de fin sea posterior a la de inicio
             if fecha_inicio >= fecha_fin:
                 raise ValidationError({
                     'fecha_fin': "La fecha y hora de fin debe ser posterior a la de inicio."
                 })
 
-            # 2. Validar cruces de horarios en el mismo lugar físico
+            # Validar cruces de horarios en el mismo lugar físico
             if lugar:
                 conflictos = Evento.objects.filter(
                     lugar=lugar,
@@ -53,7 +60,7 @@ class EventoForm(forms.ModelForm):
 
                 if conflictos.exists():
                     raise ValidationError(
-                        "Ya existe otro evento activo programado en este mismo recinto (lugar) que se cruza con el horario seleccionado."
+                        "Ya existe otro evento activo programado en este mismo recinto (lugar) y con el mismo horario seleccionado."
                     )
 
         return cleaned_data

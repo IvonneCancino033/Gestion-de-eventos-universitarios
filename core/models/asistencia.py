@@ -1,12 +1,13 @@
 from django.db import models
 from .inscripcion import Inscripcion
 
-#asistencia de una inscripcion
+#Modelo asistencia
+#Registra la presencia real del participante en el evento universitario
 class Asistencia(models.Model):
 
     fecha_asistencia = models.DateTimeField(auto_now_add=True)#aiatencia del participante
     estado = models.BooleanField(default=False) #Si participante asistio, solo dos opciones o null
-
+    # una sola asistencia por inscripcion (relacion uno a uno)
     inscripcion = models.OneToOneField(Inscripcion, on_delete=models.CASCADE, related_name='asistencia') #una inscripcion solo puede tener un solo resgistro de asistencia
 
     class Meta:

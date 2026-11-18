@@ -5,17 +5,17 @@ from .categoria import Categoria
 from .lugar import Lugar
 
 
-#evento universitario
+#Modelo evento 
+#Centraliza la informacion, horarios y espacios fisicos de las actividades universitarias
 class Evento(models.Model):
-    # opciones de estados del evento
+    # Opciones de estados del evento
     ESTADOS = [
         ('DISPONIBLE', 'Disponible'),
         ('CERRADO', 'Cerrado'),
         ('CANCELADO', 'Cancelado'),
         ('REAGENDADO', 'Reagendado'),
     ]
-    
-
+    # Campos principales del evento
     nombre = models.CharField(max_length=150)
     descripcion = models.TextField()
     
