@@ -1,6 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from .models.evento import Evento
+from django.db.models import Q
 
 class EventoForm(forms.ModelForm):
     class Meta:
@@ -61,8 +62,14 @@ class EventoForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['fecha_inicio'].input_formats = ['%Y-%m-%dT%H:%M', '%d/%m/%Y %H:%M', '%Y-%m-%d %H:%M']
         self.fields['fecha_fin'].input_formats = ['%Y-%m-%dT%H:%M', '%d/%m/%Y %H:%M', '%Y-%m-%d %H:%M']
+        # solo lugares activos (y el actual, si se edita un evento cuyo lugar se desactivo)
+        self.fields['lugar'].queryset = Lugar.objects.filter(
+            Q(estado=True) | Q(pk=self.instance.lugar_id)
+        )
+        self.fields['lugar'].empty_label = 'Selecciona un lugar'
 
-from .models import Categoria, Evento
+
+from .models import Categoria, Evento, Lugar
 
 
 class BuscarEventoForm(forms.Form):
@@ -96,3 +103,23 @@ class BuscarEventoForm(forms.Form):
         choices=[("", "Todos")] + Evento.ESTADOS,
         widget=forms.Select(attrs={"class": "form-select"}),
     )
+
+# HU-06 formulario para crear y modificar lugares
+class LugarForm(forms.ModelForm):
+    class Meta:
+        model = Lugar
+        fields = ['nombre']
+        labels = {'nombre': 'Nombre del lugar'}
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej: Sala 201'}),
+        }
+
+    # rechazar un lugar con un nombre ya existente
+    def clean_nombre(self):
+        nombre = ' '.join(self.cleaned_data['nombre'].split())  # quita espacios de sobra
+        repetido = Lugar.objects.filter(nombre__iexact=nombre)
+        if self.instance.pk:  # si estamos editando, no compararse consigo mismo
+            repetido = repetido.exclude(pk=self.instance.pk)
+        if repetido.exists():
+            raise forms.ValidationError('Ya existe un lugar con ese nombre.')
+        return nombre

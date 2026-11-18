@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Asignar roles{% endblock %}
+
+{% block content %}
+<div class="mx-auto" style="max-width: 600px;">
+    <h2 class="fw-bold text-dark mb-1">Asignar roles</h2>
+    <p class="small text-muted mb-4">Usuario: <strong>{{ usuario_editado.username }}</strong></p>
+
+    <!-- tarjeta con los roles -->
+    <div class="card card-custom shadow-sm">
+        <div class="card-body p-4">
+            <!-- pide confirmar antes de guardar -->
+            <form method="POST" onsubmit="return confirm('¿Confirmas los roles de {{ usuario_editado.username }}?');">
+                {% csrf_token %}
+                <p class="fw-semibold mb-2">Selecciona uno o más roles</p>
+
+                <!-- un recuadro por cada rol -->
+                {% for opcion in formulario.roles %}
+                    <div class="form-check mb-2">
+                        {{ opcion.tag }}
+                        <label class="form-check-label" for="{{ opcion.id_for_label }}">{{ opcion.choice_label }}</label>
+                    </div>
+                {% endfor %}
+
+                <!-- botones de guardar y volver -->
+                <div class="d-flex gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary-custom">Guardar</button>
+                    <a href="{% url 'usuarios:lista' %}" class="btn btn-outline-secondary">Volver</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

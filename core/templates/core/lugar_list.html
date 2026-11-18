@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Lugares{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-dark mb-0">Lugares del campus</h2>
+    <div>
+        <a href="{% url 'inicio' %}" class="btn btn-outline-secondary me-2">Volver</a>
+        <a href="{% url 'crear_lugar' %}" class="btn btn-primary-custom">Nuevo lugar</a>
+    </div>
+</div>
+
+<!-- confirmacion de los cambios guardados -->
+{% for mensaje in messages %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ mensaje }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+{% endfor %}
+
+<!-- todos los lugares, incluidos los precargados -->
+<div class="card card-custom shadow-sm overflow-hidden">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0 align-middle">
+            <thead>
+                <tr>
+                    <th class="ps-3 py-3">Nombre</th>
+                    <th class="py-3">Estado</th>
+                    <th class="text-end pe-3 py-3">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lugar in lugares %}
+                <tr>
+                    <td class="ps-3"><strong>{{ lugar.nombre }}</strong></td>
+                    <td>
+                        {% if lugar.estado %}
+                            <span class="badge bg-success">Activo</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Inactivo</span>
+                        {% endif %}
+                    </td>
+                    <!-- modificar y desactivar -->
+                    <td class="text-end pe-3">
+                        <a href="{% url 'editar_lugar' lugar.pk %}" class="btn btn-sm btn-outline-primary">Editar</a>
+                        <form method="post" action="{% url 'cambiar_estado_lugar' lugar.pk %}" class="d-inline">
+                            {% csrf_token %}
+                            {% if lugar.estado %}
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Desactivar</button>
+                            {% else %}
+                                <button type="submit" class="btn btn-sm btn-outline-success">Activar</button>
+                            {% endif %}
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center py-4 text-muted">No hay lugares registrados.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

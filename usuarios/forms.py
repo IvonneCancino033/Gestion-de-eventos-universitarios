@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, User
 
 
 # formulario para crear usuario, UserCreationForm ya pide la contraseña 2 veces
@@ -56,3 +56,13 @@ class UsuarioEditarForm(forms.ModelForm):
 # registro publico, usa los mismos campos y validaciones que crear usuario
 class RegistroForm(UsuarioCrearForm):
     pass
+
+
+# formulario para elegir los roles de un usuario
+class AsignarRolesForm(forms.Form):
+    roles = forms.ModelMultipleChoiceField(
+        queryset=Group.objects.order_by("name"),
+        widget=forms.CheckboxSelectMultiple(attrs={"class": "form-check-input"}),
+        required=False,
+        label="Roles",
+    )

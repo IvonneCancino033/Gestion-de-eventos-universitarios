@@ -7,12 +7,13 @@ from .models.categoria import Categoria
 from .models.evento import Evento
 from .forms import EventoForm
 from django.db.models import Count, ExpressionWrapper, F, IntegerField, Q
-from django.shortcuts import get_object_or_404, redirect, render
-from .forms import BuscarEventoForm
-from .models import Categoria, Evento, Inscripcion
+from .forms import BuscarEventoForm, LugarForm
 from usuarios.permisos import grupo_requerido
 from django.contrib import messages
 from django.utils import timezone
+from .models.lugar import Lugar
+from .models import Inscripcion
+
 
 # --- VISTA PRINCIPAL ---
 @login_required
@@ -241,3 +242,56 @@ def consultar_inscripciones(request):
         'ocupados': ocupados,
         'disponibles': disponibles,
     })
+
+# --- VISTAS DE LUGARES ---
+
+#  muestra todos los lugares, incluidos los precargados
+@login_required
+@grupo_requerido("Administrador")
+def lista_lugares(request):
+    lugares = Lugar.objects.all()
+    return render(request, 'core/lugar_list.html', {'lugares': lugares})
+
+
+# crear
+@login_required
+@grupo_requerido("Administrador")
+def crear_lugar(request):
+    if request.method == 'POST':
+        form = LugarForm(request.POST)
+        if form.is_valid():
+            lugar = form.save()
+            messages.success(request, f'Lugar "{lugar.nombre}" creado correctamente.')  # criterio 4
+            return redirect('lista_lugares')
+    else:
+        form = LugarForm()
+    return render(request, 'core/lugar_form.html', {'form': form, 'titulo': 'Nuevo lugar'})
+
+
+#  modificar
+@login_required
+@grupo_requerido("Administrador")
+def editar_lugar(request, pk):
+    lugar = get_object_or_404(Lugar, pk=pk)
+    if request.method == 'POST':
+        form = LugarForm(request.POST, instance=lugar)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Lugar "{lugar.nombre}" actualizado correctamente.')  # criterio 4
+            return redirect('lista_lugares')
+    else:
+        form = LugarForm(instance=lugar)
+    return render(request, 'core/lugar_form.html', {'form': form, 'titulo': 'Modificar lugar'})
+
+
+# desactivar (o volver a activar)
+@login_required
+@grupo_requerido("Administrador")
+def cambiar_estado_lugar(request, pk):
+    lugar = get_object_or_404(Lugar, pk=pk)
+    if request.method == 'POST':
+        lugar.estado = not lugar.estado
+        lugar.save(update_fields=['estado', 'actualizado_en'])
+        accion = 'activado' if lugar.estado else 'desactivado'
+        messages.success(request, f'Lugar "{lugar.nombre}" {accion}.')  # criterio 4
+    return redirect('lista_lugares')
