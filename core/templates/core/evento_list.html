@@ -3,6 +3,12 @@
 {% block title %}Eventos Universitarios{% endblock %}
 
 {% block content %}
+<!-- mensajes de exito o error -->
+{% for mensaje in messages %}
+    <div class="alert alert-{% if mensaje.tags == 'error' %}danger{% else %}{{ mensaje.tags }}{% endif %}">
+        {{ mensaje }}
+    </div>
+{% endfor %}
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="fw-bold text-dark mb-0">Eventos Universitarios</h2>
     <a href="{% url 'crear_evento' %}" class="btn btn-primary-custom">Organizar Evento</a>
@@ -54,6 +60,17 @@
                         </form>
                     </div>
                     {% endif %}
+
+                    <!-- Botón para inscribirse en este evento-->
+                    
+                    {% for grupo in user.groups.all %}
+                        {% if grupo.name == "Participante" %}
+                        <form method="post" action="{% url 'inscribirse_en_evento' evento.pk %}" class="d-flex justify-content-end">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-primary-custom">Inscribirme</button>
+                        </form>
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
         </div>
