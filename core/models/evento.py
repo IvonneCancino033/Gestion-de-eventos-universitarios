@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 from .categoria import Categoria
+from .lugar import Lugar
+
 
 #Modelo evento 
 #Centraliza la informacion, horarios y espacios fisicos de las actividades universitarias
@@ -13,15 +15,6 @@ class Evento(models.Model):
         ('CANCELADO', 'Cancelado'),
         ('REAGENDADO', 'Reagendado'),
     ]
-    # Opciones de recintos del campus universitario
-    LUGARES = [
-        ('AUDITORIO_PRINCIPAL', 'Auditorio Principal'),
-        ('AULA_MAGNA', 'Aula Magna'),
-        ('CANCHA_1', 'Cancha 1'),
-        ('GIMNASIO', 'Gimnasio'),
-        ('LAB_BIOINFORMATICA', 'Laboratorio de Bioinformática'),
-        ('SALA_CONFERENCIAS', 'Sala de Conferencias'),
-    ]
     # Campos principales del evento
     nombre = models.CharField(max_length=150)
     descripcion = models.TextField()
@@ -29,7 +22,7 @@ class Evento(models.Model):
     fecha_inicio = models.DateTimeField() #cuando inicia el evento (fecha y hora)
     fecha_fin = models.DateTimeField() #cuando termina el evento (fecha y hora)
 
-    lugar = models.CharField(max_length=150, choices=LUGARES)
+    lugar = models.ForeignKey(Lugar, on_delete=models.PROTECT, related_name='eventos') 
 
     cupo_maximo = models.PositiveIntegerField(validators=[MinValueValidator(1)]) # minimo 1 cupo
     estado = models.CharField(max_length=20, choices=ESTADOS, default='DISPONIBLE')

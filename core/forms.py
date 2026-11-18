@@ -2,6 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from .models.evento import Evento
+from django.db.models import Q
 
 class EventoForm(forms.ModelForm):
     class Meta:
@@ -40,11 +41,6 @@ class EventoForm(forms.ModelForm):
                     'fecha_inicio': "No se pueden programar eventos en años que ya pasaron."
                 })
             # Validar que la fecha de fin sea posterior a la de inicio
-            if fecha_fin.year > current_year:
-                raise ValidationError({
-                    'fecha_fin': "No se pueden programar eventos en años que ya pasaron"
-                })
-
             if fecha_inicio >= fecha_fin:
                 raise ValidationError({
                     'fecha_fin': "La fecha y hora de fin debe ser posterior a la de inicio."
@@ -73,3 +69,64 @@ class EventoForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['fecha_inicio'].input_formats = ['%Y-%m-%dT%H:%M', '%d/%m/%Y %H:%M', '%Y-%m-%d %H:%M']
         self.fields['fecha_fin'].input_formats = ['%Y-%m-%dT%H:%M', '%d/%m/%Y %H:%M', '%Y-%m-%d %H:%M']
+        # solo lugares activos (y el actual, si se edita un evento cuyo lugar se desactivo)
+        self.fields['lugar'].queryset = Lugar.objects.filter(
+            Q(estado=True) | Q(pk=self.instance.lugar_id)
+        )
+        self.fields['lugar'].empty_label = 'Selecciona un lugar'
+
+
+from .models import Categoria, Evento, Lugar
+
+
+class BuscarEventoForm(forms.Form):
+  
+
+    nombre = forms.CharField(
+        label="Nombre",
+        required=False,
+        max_length=150,
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Ej: Torneo de fútbol"}
+        ),
+    )
+    categoria = forms.ModelChoiceField(
+        label="Categoría",
+        queryset=Categoria.objects.filter(estado=True),
+        required=False,
+        empty_label="Todas",
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
+    fecha = forms.DateField(
+        label="Fecha",
+        required=False,
+        widget=forms.DateInput(
+            attrs={"type": "date", "class": "form-control"}, format="%Y-%m-%d"
+        ),
+    )
+    estado = forms.ChoiceField(
+        label="Estado",
+        required=False,
+        choices=[("", "Todos")] + Evento.ESTADOS,
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
+
+# HU-06 formulario para crear y modificar lugares
+class LugarForm(forms.ModelForm):
+    class Meta:
+        model = Lugar
+        fields = ['nombre']
+        labels = {'nombre': 'Nombre del lugar'}
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej: Sala 201'}),
+        }
+
+    # rechazar un lugar con un nombre ya existente
+    def clean_nombre(self):
+        nombre = ' '.join(self.cleaned_data['nombre'].split())  # quita espacios de sobra
+        repetido = Lugar.objects.filter(nombre__iexact=nombre)
+        if self.instance.pk:  # si estamos editando, no compararse consigo mismo
+            repetido = repetido.exclude(pk=self.instance.pk)
+        if repetido.exists():
+            raise forms.ValidationError('Ya existe un lugar con ese nombre.')
+        return nombre

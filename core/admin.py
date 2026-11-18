@@ -3,6 +3,7 @@ from .models.categoria import Categoria
 from .models.evento import Evento
 from .models.inscripcion import Inscripcion
 from .models.asistencia import Asistencia
+from .models.lugar import Lugar
 
 @admin.register(Categoria) #registrar categoria
 class CategoriaAdmin(admin.ModelAdmin):#clase catgeoria en el panel
@@ -18,3 +19,8 @@ class EventoAdmin(admin.ModelAdmin):
 
 admin.site.register(Inscripcion) #registrar la tabla de inscripcion
 admin.site.register(Asistencia) #registra la tabla de asistencias
+
+@admin.register(Lugar) #registrar lugar
+class LugarAdmin(admin.ModelAdmin):
+    list_display = ('nombre', 'estado', 'creado_en') #lo que se mostrara en la tabla
+    search_fields = ('nombre',)

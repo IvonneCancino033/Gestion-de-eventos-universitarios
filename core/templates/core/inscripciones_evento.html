@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Inscripciones{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="mb-4">
+        <h1 class="h3 mb-1">Consultar inscripciones</h1>
+        <p class="mb-0">Selecciona uno de tus eventos para ver sus participantes.</p>
+    </div>
+
+    {# Criterio 1: seleccionar uno de sus eventos #}
+    <div class="card p-3 p-md-4 mb-4">
+        <form method="GET" class="row g-3 align-items-end">
+            <div class="col-12 col-md-9">
+                <label for="evento" class="form-label">Evento</label>
+                <select name="evento" id="evento" class="form-select" required>
+                    <option value="">-- Selecciona un evento --</option>
+                    {% for e in mis_eventos %}
+                        <option value="{{ e.pk }}" {% if evento and e.pk == evento.pk %}selected{% endif %}>
+                            {{ e.nombre }} ({{ e.fecha_inicio|date:"d/m/Y" }})
+                        </option>
+                    {% empty %}
+                        <option value="" disabled>No tienes eventos creados</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-12 col-md-3">
+                <button type="submit" class="btn btn-primary-custom w-100">Ver inscripciones</button>
+            </div>
+        </form>
+    </div>
+    {% if evento %}
+        {# Criterio 3: cupos ocupados y disponibles #}
+        <div class="row g-3 mb-4">
+            <div class="col-12 col-md-4">
+                <div class="card p-3 text-center">
+                    <span class="small">Cupo máximo</span>
+                    <strong class="fs-3">{{ evento.cupo_maximo }}</strong>
+                </div>
+            </div>
+            <div class="col-6 col-md-4">
+                <div class="card p-3 text-center">
+                    <span class="small">Cupos ocupados</span>
+                    <strong class="fs-3">{{ ocupados }}</strong>
+                </div>
+            </div>
+            <div class="col-6 col-md-4">
+                <div class="card p-3 text-center">
+                    <span class="small">Cupos disponibles</span>
+                    <strong class="fs-3">{{ disponibles }}</strong>
+                </div>
+            </div>
+        </div>
+        {% if inscripciones %}
+            {# Criterio 2: participantes y estado de cada inscripción #}
+            <div class="card p-3 p-md-4">
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Participante</th>
+                                <th>Correo</th>
+                                <th>Fecha de inscripción</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for inscripcion in inscripciones %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ inscripcion.usuario.get_full_name|default:inscripcion.usuario.username }}</td>
+                                    <td>{{ inscripcion.usuario.email|default:"-" }}</td>
+                                    <td>{{ inscripcion.fecha_inscripcion|date:"d/m/Y H:i" }}</td>
+                                    <td>
+                                        <span class="badge badge-estado estado-{{ inscripcion.estado }}">
+                                            {{ inscripcion.get_estado_display }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% else %}
+            {# Criterio 4: si no hay inscripciones, se informa #}
+            <div class="card estado-vacio text-center py-5">
+                <i class="bi bi-people mb-3"></i>
+                <h2 class="h5">Este evento aún no tiene inscripciones.</h2>
+                <p class="mb-0">Cuando alguien se inscriba, aparecerá aquí.</p>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

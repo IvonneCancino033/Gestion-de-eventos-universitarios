@@ -100,8 +100,12 @@ STATICFILES_DIRS = [
 # Envio de correos por consola (para simular la recuperacion de contraseña)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'noreply@eventos.utalca.cl'
+# el enlace para recuperar la contraseña dura 2 horas(en segundos)
+PASSWORD_RESET_TIMEOUT = 60 * 60 * 2
+
 
 # Rutas de autenticacion y redirecciones de sesion
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'inicio'
 LOGOUT_REDIRECT_URL = 'login'
+

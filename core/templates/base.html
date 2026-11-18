@@ -35,13 +35,25 @@
           <li class="nav-item"><a class="nav-link" href="{% url 'inicio' %}">Inicio</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'lista_eventos' %}">Eventos</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'lista_categorias' %}">Categorías</a></li>
-          <!-- solo administradores ven el enlace a usuarios -->
+          <!-- organizadores y administradores ven el enlace a inscripciones -->
+          {% if user.is_superuser %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'consultar_inscripciones' %}">Inscripciones</a></li>
+          {% else %}
+            {% for grupo in user.groups.all %}
+              {% if grupo.name == "Organizador" or grupo.name == "Administrador" %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'consultar_inscripciones' %}">Inscripciones</a></li>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+          <!-- solo administradores ven el enlace a usuarios y lugares -->
           {% if user.is_superuser %}
             <li class="nav-item"><a class="nav-link" href="{% url 'usuarios:lista' %}">Usuarios</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'lista_lugares' %}">Lugares</a></li>
           {% else %}
             {% for grupo in user.groups.all %}
               {% if grupo.name == "Administrador" %}
                 <li class="nav-item"><a class="nav-link" href="{% url 'usuarios:lista' %}">Usuarios</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'lista_lugares' %}">Lugares</a></li>
               {% endif %}
             {% endfor %}
           {% endif %}
