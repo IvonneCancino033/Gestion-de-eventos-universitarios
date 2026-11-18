@@ -35,6 +35,15 @@
           <li class="nav-item"><a class="nav-link" href="{% url 'inicio' %}">Inicio</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'lista_eventos' %}">Eventos</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'lista_categorias' %}">Categorías</a></li>
+         
+          <!-- solo participantes ven el enlace a sus inscripciones -->
+          {% for grupo in user.groups.all %}
+            {% if grupo.name == "Participante" %}
+              <li class="nav-item"><a class="nav-link" href="{% url 'mis_inscripciones' %}">Mis inscripciones</a></li>
+            {% endif %}
+          {% endfor %}
+
+          
           <!-- organizadores y administradores ven el enlace a inscripciones -->
           {% if user.is_superuser %}
             <li class="nav-item"><a class="nav-link" href="{% url 'consultar_inscripciones' %}">Inscripciones</a></li>
