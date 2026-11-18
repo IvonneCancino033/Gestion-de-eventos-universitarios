@@ -18,7 +18,7 @@
                 <p class="card-text text-secondary small flex-grow-1">{{ evento.descripcion|truncatewords:15|default:"Sin descripción" }}</p>
                 
                 <ul class="list-unstyled small mb-3 border-top pt-2">
-                    <li><strong>Lugar:</strong> {{ evento.get_lugar_display|default:evento.lugar }}</li>
+                    <li><strong>Lugar:</strong>{{ evento.lugar.nombre }}</li>
                     <li><strong>Inicio:</strong> {{ evento.fecha_inicio|date:"d/m/Y H:i" }}</li>
                     <li><strong>Fin:</strong> {{ evento.fecha_fin|date:"d/m/Y H:i" }}</li>
                     <li><strong>Cupos:</strong> {{ evento.cupo_maximo }}</li>

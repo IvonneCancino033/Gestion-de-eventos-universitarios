@@ -3,3 +3,4 @@ from .categoria import Categoria
 from .evento import Evento
 from .inscripcion import Inscripcion
 from .asistencia import Asistencia
+from .lugar import Lugar
