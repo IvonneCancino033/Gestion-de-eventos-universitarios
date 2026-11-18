@@ -45,13 +45,15 @@
               {% endif %}
             {% endfor %}
           {% endif %}
-          <!-- solo administradores ven el enlace a usuarios -->
+          <!-- solo administradores ven el enlace a usuarios y lugares -->
           {% if user.is_superuser %}
             <li class="nav-item"><a class="nav-link" href="{% url 'usuarios:lista' %}">Usuarios</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'lista_lugares' %}">Lugares</a></li>
           {% else %}
             {% for grupo in user.groups.all %}
               {% if grupo.name == "Administrador" %}
                 <li class="nav-item"><a class="nav-link" href="{% url 'usuarios:lista' %}">Usuarios</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'lista_lugares' %}">Lugares</a></li>
               {% endif %}
             {% endfor %}
           {% endif %}

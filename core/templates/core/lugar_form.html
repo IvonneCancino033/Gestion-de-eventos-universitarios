@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7 col-lg-6">
+        <div class="card card-custom overflow-hidden">
+            <div class="card-header bg-primary-custom text-white py-3">
+                <h4 class="mb-0 fw-bold">{{ titulo }}</h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label for="{{ form.nombre.id_for_label }}" class="form-label fw-bold small">{{ form.nombre.label }}</label>
+                        {{ form.nombre }}
+                        <!--  aqui aparece "Ya existe un lugar con ese nombre." -->
+                        {% for error in form.nombre.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 border-top pt-3">
+                        <a href="{% url 'lista_lugares' %}" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary-custom">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
