@@ -34,7 +34,6 @@
         <ul class="navbar-nav me-auto ms-3">
           <li class="nav-item"><a class="nav-link" href="{% url 'inicio' %}">Inicio</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'lista_eventos' %}">Eventos</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'lista_categorias' %}">Categorías</a></li>
           <!-- organizadores y administradores ven el enlace a inscripciones -->
           {% if user.is_superuser %}
             <li class="nav-item"><a class="nav-link" href="{% url 'consultar_inscripciones' %}">Inscripciones</a></li>
@@ -53,6 +52,7 @@
             {% for grupo in user.groups.all %}
               {% if grupo.name == "Administrador" %}
                 <li class="nav-item"><a class="nav-link" href="{% url 'usuarios:lista' %}">Usuarios</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'lista_categorias' %}">Categorías</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'lista_lugares' %}">Lugares</a></li>
               {% endif %}
             {% endfor %}

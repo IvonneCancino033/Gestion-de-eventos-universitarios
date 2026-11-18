@@ -18,16 +18,20 @@ from .models import Inscripcion
 # --- VISTA PRINCIPAL ---
 @login_required
 def inicio(request):
-    return render(request, "core/index.html")
+    # revisa si el usuario es administrador para mostrarle sus opciones
+    es_admin = request.user.is_superuser or request.user.groups.filter(name="Administrador").exists()
+    return render(request, "core/index.html", {"es_admin": es_admin})
 
 
 # --- VISTAS DE CATEGORIAS ---
 @login_required
+@grupo_requerido("Administrador")
 def lista_categorias(request):
     categorias = Categoria.objects.all().order_by('-creado_en')
     return render(request, 'core/categoria_list.html', {'categorias': categorias})
 
 @login_required
+@grupo_requerido("Administrador")
 def crear_categoria(request):
     if request.method == 'POST':
         nombre = request.POST.get('nombre')
@@ -45,6 +49,7 @@ def crear_categoria(request):
     return render(request, 'core/categoria_form.html')
 
 @login_required
+@grupo_requerido("Administrador")
 def editar_categoria(request, pk):
     categoria = get_object_or_404(Categoria, pk=pk)
     if request.method == 'POST':
