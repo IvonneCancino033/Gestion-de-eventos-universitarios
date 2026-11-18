@@ -300,3 +300,16 @@ def cambiar_estado_lugar(request, pk):
         accion = 'activado' if lugar.estado else 'desactivado'
         messages.success(request, f'Lugar "{lugar.nombre}" {accion}.')  # criterio 4
     return redirect('lista_lugares')
+
+# --- MIS INSCRIPCIONES (participante) ---
+@login_required
+@grupo_requerido("Participante")
+def mis_inscripciones(request):
+    # solo las inscripciones del usuario conectado, las más recientes primero
+    inscripciones = (
+        Inscripcion.objects
+        .filter(usuario=request.user)
+        .select_related('evento', 'evento__lugar')
+        .order_by('-fecha_inscripcion')
+    )
+    return render(request, 'core/mis_inscripciones.html', {'inscripciones': inscripciones})
